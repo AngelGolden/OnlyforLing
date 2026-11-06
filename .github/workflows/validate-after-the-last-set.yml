@@ -21,7 +21,10 @@ jobs:
       - run: npm test
       - run: npm run story:validate -- stories/after-the-last-set/story.json
       - run: npm run story:test -- stories/after-the-last-set/story.json
-      - name: Build production player with AFTER THE LAST SET\n        env:\n          STORY_FILE: stories/after-the-last-set/story.json\n        run: npm run build
+      - name: Build production player with AFTER THE LAST SET
+        env:
+          STORY_FILE: stories/after-the-last-set/story.json
+        run: npm run build
       - run: npx playwright install --with-deps chrome
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
