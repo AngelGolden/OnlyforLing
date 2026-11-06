@@ -50,7 +50,9 @@ test("AFTER THE LAST SET uses the native phone runtime end to end", async ({ pag
     "模特拍攝工作照片（待補圖）",
     "泰國菜照片（待補圖）",
   ]) {
-    await expect(phone.locator(".skin-photo")).toContainText(caption);
+    await expect(
+      phone.locator(".skin-photo").filter({ hasText: caption }),
+    ).toHaveCount(1);
   }
 
   await expect(phone.getByText("邝玲玲", { exact: true })).toHaveCount(0);
