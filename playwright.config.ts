@@ -11,6 +11,7 @@ export default defineConfig({
     "mymy.spec.ts",
     "reference-next.spec.ts",
     "original-icons.spec.ts",
+    "after-the-last-set.spec.ts",
   ],
   timeout: 30000,
   use: {
