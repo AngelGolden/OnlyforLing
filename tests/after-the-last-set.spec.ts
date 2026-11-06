@@ -60,3 +60,19 @@ test("AFTER THE LAST SET uses the native phone runtime end to end", async ({ pag
   await expect(phone.locator(".home-screen")).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test("production build serves AFTER THE LAST SET without mocked work.json", async ({ page }) => {
+  await page.unroute("**/work.json");
+  await page.goto("/");
+  const phone = page.locator(".phone-shell");
+  await expect(phone.locator(".lock-screen")).toBeVisible();
+  await phone.getByRole("button", { name: "轻触解锁" }).click();
+  for (const digit of "0511") {
+    await phone.getByRole("button", { name: "密码键" + digit, exact: true }).click();
+  }
+  await expect(phone.locator(".home-screen")).toBeVisible();
+  await phone.getByRole("button", { name: "打开WhatsApp", exact: true }).click();
+  await expect(
+    phone.locator(".wa-chat-row").filter({ hasText: "鄺學姐 💙" }),
+  ).toHaveCount(1);
+});
