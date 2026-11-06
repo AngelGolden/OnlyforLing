@@ -1,0 +1,35 @@
+name: Validate AFTER THE LAST SET
+on:
+  push:
+    branches:
+      - fix/after-the-last-set-whatsapp
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run story:validate -- stories/after-the-last-set/story.json
+      - run: npm run story:test -- stories/after-the-last-set/story.json
+      - run: npm run build
+      - run: npx playwright install --with-deps chrome
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: after-the-last-set-native-build-and-test-results
+          if-no-files-found: ignore
+          path: |
+            dist/
+            test-results/
+            outputs/
