@@ -24,7 +24,6 @@
   "installedApps": [
     "appstore",
     "phone",
-    "contacts",
     "photos",
     "notes",
     "calendar",
@@ -36,8 +35,6 @@
     "maps",
     "clock",
     "camera",
-    "reminders",
-    "files",
     "forum",
     "youtube",
     "douyin"

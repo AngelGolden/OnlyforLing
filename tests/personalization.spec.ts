@@ -74,7 +74,22 @@ test("静态：固定字符串逐字、跳过卸载、资源与编译产物", as
   // 用户澄清：手机自带的「音乐」未安装则跳过卸载，Spotify 与音乐事件保留。
   expect(raw.installedApps).not.toContain("music");
   expect(raw.installedApps).toContain("spotify");
-  expect(raw.installedApps).toHaveLength(19);
+  // 通讯录 / 提醒事项 / 文件已卸载：主屏只保留 16 个 App，
+  // 且编译产物里这三个 App 与通讯录卡片数据都不再出现。
+  expect(raw.installedApps).not.toContain("contacts");
+  expect(raw.installedApps).not.toContain("reminders");
+  expect(raw.installedApps).not.toContain("files");
+  expect(raw.installedApps).toHaveLength(16);
+  for (const id of ["contacts", "reminders", "files"]) {
+    const app = work.apps.find((a: any) => a.id === id);
+    expect(app?.installed, `${id} 应已卸载`).toBe(false);
+    expect(app?.visible, `${id} 不应再显示在主屏`).toBe(false);
+    expect(work.data[id], `${id} 数据应清空`).toBeUndefined();
+  }
+  expect(work.apps).toHaveLength(49);
+  // 顶层 contacts 名录是 WhatsApp / 电话共用数据，卸载通讯录 App 不应动到聊天记录。
+  expect(work.data.whatsapp.length).toBeGreaterThan(700);
+  expect(work.data.phone).toHaveLength(9);
   expect(raw.content.spotify).toHaveLength(4);
   expect(raw.events.some((e: any) => e.id === "WA_MUSIC_001")).toBe(true);
 
@@ -216,4 +231,31 @@ test("蓝牙：我的设备里出现连接过的 Ling`s airpods", async ({ page 
   await expect(device).toBeVisible();
   await expect(device).toContainText(BLUETOOTH_DEVICE);
   await expect(phone.getByText("我的设备", { exact: true })).toBeVisible();
+});
+
+test("卸载验收｜通讯录 / 提醒事项 / 文件不在主屏、搜索不可达，其余 App 正常", async ({
+  page,
+}) => {
+  test.setTimeout(90000);
+  const phone = await loadPhone(page);
+  for (const name of ["通讯录", "提醒事项", "文件"]) {
+    await expect(
+      phone.getByRole("button", { name: `打开${name}`, exact: true }),
+      `${name} 图标不应再出现在主屏`,
+    ).toHaveCount(0);
+  }
+  // App 搜索只列已安装 App，三个已卸载的 App 都搜不到。
+  await phone.getByRole("button", { name: "搜索", exact: true }).click();
+  for (const name of ["通讯录", "提醒事项", "文件"]) {
+    await phone.getByPlaceholder("App 名称").fill(name);
+    await expect(
+      phone.locator(".search-result"),
+      `${name} 不应出现在搜索结果`,
+    ).toHaveCount(0);
+  }
+  // 反向确认卸载没有波及其余 App。
+  await phone.getByPlaceholder("App 名称").fill("相册");
+  await expect(phone.locator(".search-result")).toHaveCount(1);
+  await phone.locator(".search-result").first().click();
+  await expect(phone.locator(".app-screen:not([inert])")).toBeVisible();
 });
