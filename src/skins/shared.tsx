@@ -10,6 +10,11 @@ import { useState, type ReactNode } from "react";
 import type { SkinProps } from "../AppSkins";
 import { safeMedia, type Item } from "../schema";
 export type Props = SkinProps;
+/**
+ * WA_LC_001：Notes / Photos「本次进入后滚动到列表末尾」的标记键。
+ * Skin 滚动到底时写 true；Phone.recordReview 在离开 App 时消费并重置。
+ */
+export const SCROLL_END_KEY = "scrolledToEnd";
 export const meta = (
   i: Pick<Item, "meta"> | undefined,
   key: string,

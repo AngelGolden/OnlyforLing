@@ -1,0 +1,24 @@
+{
+  "note": "图号 ↔ 用户本地源文件映射。脚本按此顺序原样复制为 public/ig-media/ll-new-NN.jpg，不缩放、不裁剪、不调色、不生成新素材。source 为用户消息里 <image_local_path> 的顺序，顺序与 @image#N 一一对应。",
+  "files": [
+    { "index": 1, "label": "太原1.jpg", "source": "D:/workbuddy/检手机素材/太原1.jpg", "file": "ll-new-01.jpg", "usedBy": "POST 01 图一" },
+    { "index": 2, "label": "fly1.jpg", "source": "D:/workbuddy/检手机素材/fly1.jpg", "file": "ll-new-02.jpg", "usedBy": "POST 02 图2" },
+    { "index": 3, "label": "fly2.jpg", "source": "D:/workbuddy/检手机素材/fly2.jpg", "file": "ll-new-03.jpg", "usedBy": "POST 02 图3" },
+    { "index": 4, "label": "🖤1.jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-515Z-2f850a02.jpg", "file": "ll-new-04.jpg", "usedBy": "POST 03 图4" },
+    { "index": 5, "label": "🖤2.jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-520Z-45bc8322.jpg", "file": "ll-new-05.jpg", "usedBy": "POST 03 图5" },
+    { "index": 6, "label": "🖤3.jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-521Z-36187eca.jpg", "file": "ll-new-06.jpg", "usedBy": "POST 03 图6" },
+    { "index": 7, "label": "morning1 (1).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-523Z-c33f4e1c.jpg", "file": "ll-new-07.jpg", "usedBy": "POST 04 图7" },
+    { "index": 8, "label": "morning1 (2).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-525Z-3877100f.jpg", "file": "ll-new-08.jpg", "usedBy": "POST 04 图8" },
+    { "index": 9, "label": "SaveClip.App_830562768_18620543860015167_7377919281963882931_n.jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-527Z-6ea6a10f.jpg", "file": "ll-new-09.jpg", "usedBy": "POST 05 图9" },
+    { "index": 10, "label": "dior (2).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-529Z-0665f882.jpg", "file": "ll-new-10.jpg", "usedBy": "POST 06 图10" },
+    { "index": 11, "label": "dior (1).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-531Z-8e2b2941.jpg", "file": "ll-new-11.jpg", "usedBy": "POST 06 图11" },
+    { "index": 12, "label": "flower.jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-533Z-c055b655.jpg", "file": "ll-new-12.jpg", "usedBy": "POST 07 图12" },
+    { "index": 13, "label": "life (1).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-535Z-cc451fde.jpg", "file": "ll-new-13.jpg", "usedBy": "POST 08 图13" },
+    { "index": 14, "label": "life (3).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-537Z-cf9e0200.jpg", "file": "ll-new-14.jpg", "usedBy": "POST 08 图14" },
+    { "index": 15, "label": "life (2).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-539Z-818d39e0.jpg", "file": "ll-new-15.jpg", "usedBy": "POST 08 图15" },
+    { "index": 16, "label": "run (2).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-541Z-2faf474c.jpg", "file": "ll-new-16.jpg", "usedBy": "POST 09 图16" },
+    { "index": 17, "label": "run (1).jpg", "source": "C:/Users/11626/.workbuddy-ai/clipboard-images/clipboard-2026-11-10T21-16-50-543Z-c14ca2fe.jpg", "file": "ll-new-17.jpg", "usedBy": "POST 09 图17" },
+    { "index": 18, "label": "good night (2).jpg", "source": "D:/workbuddy/检手机素材/good night (2).jpg", "file": "ll-new-18.jpg", "usedBy": "POST 10 图18" },
+    { "index": 19, "label": "good night (1).jpg", "source": "D:/workbuddy/检手机素材/good night (1).jpg", "file": "ll-new-19.jpg", "usedBy": "POST 10 图19" }
+  ]
+}

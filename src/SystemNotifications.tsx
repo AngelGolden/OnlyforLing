@@ -4,6 +4,23 @@ import { X } from "lucide-react";
 import { AppArtwork } from "./AppArtwork";
 import type { Work } from "./schema";
 export function notificationContent(text: string, apps: Work["apps"]) {
+  // 结构化通知：@appId|time|sender|body —— 可指定 App 图标与通知时间。
+  // 旧格式 "发件人:内容" 保持兼容，时间显示「现在」。
+  if (text.startsWith("@")) {
+    const [appId = "messages", time = "现在", sender = "信息", ...rest] =
+      text.slice(1).split("|");
+    // 可选末段 ">appId:会话" 指定点击通知后的跳转位置。
+    // 用 ">" 前缀识别，避免与正文中出现的 "|" 冲突。
+    const tail = rest.at(-1);
+    const target = tail?.startsWith(">") ? tail.slice(1) : "";
+    return {
+      title: sender,
+      body: (target ? rest.slice(0, -1) : rest).join("|"),
+      appId: apps.some((a) => a.id === appId) ? appId : "messages",
+      time,
+      target,
+    };
+  }
   const separator = text.search(/[:：]/);
   const sender = separator > 0 ? text.slice(0, separator) : "信息";
   const app = apps.find((a) => a.name === sender);
@@ -11,6 +28,8 @@ export function notificationContent(text: string, apps: Work["apps"]) {
     title: sender,
     body: separator > 0 ? text.slice(separator + 1) : text,
     appId: app?.id ?? "messages",
+    time: "现在",
+    target: "",
   };
 }
 export function SystemNotifications({
@@ -22,7 +41,7 @@ export function SystemNotifications({
 }: {
   notices: string[];
   apps: Work["apps"];
-  onOpen: () => void;
+  onOpen: (target?: string, index?: number) => void;
   onDismiss: (index: number) => void;
   compact?: boolean;
 }) {
@@ -53,7 +72,12 @@ export function SystemNotifications({
                 if (info.offset.x < -80) onDismiss(index);
               }}
             >
-              <button className="notice-open" onClick={onOpen}>
+              <button
+                className="notice-open"
+                onClick={() =>
+                  onOpen(n.target || `${n.appId}:${n.title}`, index)
+                }
+              >
                 <span className="notice-app-art">
                   <AppArtwork id={n.appId} />
                 </span>
@@ -61,7 +85,7 @@ export function SystemNotifications({
                   <strong>{n.title}</strong>
                   <span>{n.body}</span>
                 </span>
-                <time>现在</time>
+                <time>{n.time}</time>
               </button>
               {!compact && (
                 <button

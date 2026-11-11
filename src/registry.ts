@@ -187,7 +187,7 @@ export const registry: AppPlugin[] = definitions.map(
     color,
     icon,
     tabs,
-    description: "非官方虚构叙事模板",
+    description: "手机应用",
   }),
 );
 export const getApp = (id: string) =>

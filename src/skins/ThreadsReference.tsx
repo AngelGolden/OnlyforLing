@@ -50,7 +50,7 @@ export function ThreadsReference(p: SkinProps) {
       id: "local-thread-" + n,
       title: "本地串文",
       body,
-      sender: p.owner || "机主",
+      sender: p.owner || "我",
       time: p.virtualTime || "09:41",
       meta: { local: "true" },
     }),
@@ -220,7 +220,7 @@ export function ThreadsReference(p: SkinProps) {
                       : tab === "动态"
                         ? "动态"
                         : tab === "个人主页"
-                          ? p.owner || "机主"
+                          ? p.owner || "我"
                           : tab}
                   </h1>
                   {(tab === "消息" || tab === "动态") && <BellOff />}
@@ -330,7 +330,7 @@ export function ThreadsReference(p: SkinProps) {
             {tab === "个人主页" && (
               <>
                 <div className="tr-profile">
-                  <Avatar name={p.owner || "机主"} />
+                  <Avatar name={p.owner || "我"} />
                   <p>{p.owner}</p>
                 </div>
                 {feed
@@ -447,7 +447,7 @@ export function ThreadsReference(p: SkinProps) {
             </button>
           </header>
           <div className="tr-compose-content">
-            <Avatar name={p.owner || "机主"} />
+            <Avatar name={p.owner || "我"} />
             <div>
               <b>{p.owner}</b>
               <span className="tr-muted"> › 社群或话题</span>

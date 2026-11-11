@@ -1,0 +1,396 @@
+/**
+ * 校园论坛固定内容视图样式。
+ *
+ * 复用 skins.css 里现有的 catalog-skin / catalog-nav / catalog-search /
+ * forum-banner / forum-topic / forum-board 结构，只在 .forum-v1 作用域内
+ * 覆盖双区布局与窄视口字号，不影响其他 App 的同名样式。
+ */
+
+.forum-v1 {
+  --app-accent: #4f759d;
+  /*
+   * 深色手机主题下 skins.css 的 .dark-phone .catalog-skin:not(...) 会把根背景
+   * 改成 #191919 且文字改成浅色；本论坛是固定浅色版式，列表两栏已显式设白底，
+   * 详情页同样需要白底，否则会出现深色底 + 深色字的低对比度问题。
+   * 该基础选择器特异性很高，这里用 !important 且只作用于 .forum-v1。
+   */
+  background: #fff !important;
+  color: #202833 !important;
+}
+
+.forum-v1 .forum-banner {
+  padding: 11px 13px;
+  flex-shrink: 0;
+}
+
+.forum-v1 .forum-banner strong {
+  font-size: 15px;
+}
+
+.forum-v1 .fm-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.forum-v1 .fm-posts,
+.forum-v1 .fm-boards {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #fff;
+}
+
+.forum-v1 .fm-posts {
+  border-right: 1px solid #e9edf2;
+}
+
+/* 两个区块各自保留独立搜索栏，沿用现有 catalog-search 组件样式 */
+.forum-v1 .catalog-search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin: 9px 9px 7px;
+  padding: 0 7px;
+  border-radius: 8px;
+  background: #f0f2f5;
+  color: #9aa3af;
+  font-size: 11px;
+  line-height: normal;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.forum-v1 .catalog-search svg {
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+}
+
+.forum-v1 .catalog-search input {
+  width: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: 7px 0;
+  font-size: 11px;
+  color: #3c4652;
+}
+
+.forum-v1 .fm-sort {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 0 9px 8px;
+  flex-shrink: 0;
+}
+
+.forum-v1 .fm-sort strong {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4c5a6b;
+  white-space: nowrap;
+}
+
+.forum-v1 .fm-sort-buttons {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.forum-v1 .fm-sort-buttons button {
+  padding: 3px 7px;
+  border-radius: 10px;
+  background: #f1f3f6;
+  color: #7c8897;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.forum-v1 .fm-sort-buttons button.selected {
+  background: #4f759d;
+  color: #fff;
+}
+
+.forum-v1 .fm-filter-chip {
+  align-self: flex-start;
+  margin: 0 9px 7px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #e9eef5;
+  color: #5c7b99;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.forum-v1 .fm-list,
+.forum-v1 .fm-board-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+.forum-v1 .fm-topic {
+  display: block;
+  width: 100%;
+  padding: 10px 9px;
+  text-align: left;
+  background: #fff;
+  border-bottom: 1px solid #edf0f4;
+  box-sizing: border-box;
+}
+
+.forum-v1 .fm-topic > strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #202833;
+  overflow-wrap: anywhere;
+}
+
+.forum-v1 .fm-topic p {
+  margin: 5px 0;
+  font-size: 10px;
+  color: #98a1ad;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.forum-v1 .fm-topic > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 9px;
+  line-height: 1.4;
+  color: #9aa4b1;
+}
+
+.forum-v1 .fm-topic .fm-topic-stats {
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.forum-v1 .fm-topic-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* 隐藏爆料帖沿用原卡片，只有一枚轻量文字标签，不加弹窗、警告框或色块 */
+.forum-v1 .fm-topic .fm-hot-tag {
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: #fff1e8;
+  color: #c4703c;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.forum-v1 .fm-board {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 8px;
+  text-align: left;
+  color: #6b8099;
+  background: #fff;
+  border-bottom: 1px solid #edf0f4;
+  box-sizing: border-box;
+}
+
+.forum-v1 .fm-board svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.forum-v1 .fm-board > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.forum-v1 .fm-board strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #3c4a5a;
+  overflow-wrap: anywhere;
+}
+
+.forum-v1 .fm-board small {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  line-height: 1.35;
+  color: #9aa4b1;
+}
+
+.forum-v1 .fm-board em {
+  display: block;
+  margin-top: 4px;
+  font-style: normal;
+  font-size: 9px;
+  color: #7c8ea3;
+}
+
+.forum-v1 .fm-board.selected {
+  background: #eef3f9;
+}
+
+.forum-v1 .fm-empty {
+  padding: 18px 10px;
+  text-align: center;
+  font-size: 10px;
+  color: #9aa4b1;
+}
+
+/* 帖子详情：沿用 catalog-scroll 作为整页滚动容器 */
+.forum-v1 .fm-detail {
+  padding-bottom: 18px;
+}
+
+.forum-v1 .fm-detail-post {
+  padding: 14px 14px 12px;
+  border-bottom: 6px solid #f2f4f7;
+}
+
+.forum-v1 .fm-detail-post h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #202833;
+}
+
+.forum-v1 .fm-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 7px 0 12px;
+  font-size: 10px;
+  color: #9aa4b1;
+}
+
+.forum-v1 .fm-detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -4px 0 11px;
+}
+
+.forum-v1 .fm-detail-tags span {
+  padding: 2px 7px;
+  border-radius: 9px;
+  background: #f1f3f6;
+  color: #8a95a2;
+  font-size: 9px;
+}
+
+.forum-v1 .fm-detail-post > p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #313a45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.forum-v1 .fm-detail-stats {
+  display: flex;
+  gap: 14px;
+  padding-top: 9px;
+  border-top: 1px solid #f0f2f5;
+  font-size: 10px;
+  color: #8a95a2;
+}
+
+.forum-v1 .fm-detail-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.forum-v1 .fm-comments-title {
+  margin: 0;
+  padding: 11px 14px 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #7c8897;
+}
+
+.forum-v1 .fm-comments {
+  margin: 0;
+  padding: 0 14px;
+  list-style: none;
+}
+
+.forum-v1 .fm-comment {
+  padding: 9px 0;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.forum-v1 .fm-comment.fm-reply {
+  padding-left: 9px;
+  border-left: 2px solid #dde5ee;
+}
+
+.forum-v1 .fm-comment.fm-reply[data-depth="1"] {
+  margin-left: 14px;
+}
+
+.forum-v1 .fm-comment.fm-reply[data-depth="2"] {
+  margin-left: 28px;
+  border-left-color: #cbd8e8;
+}
+
+.forum-v1 .fm-comment-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.forum-v1 .fm-comment-head strong {
+  font-weight: 600;
+  color: #4f759d;
+}
+
+.forum-v1 .fm-comment-head span,
+.forum-v1 .fm-comment-head em {
+  font-style: normal;
+  color: #a6afba;
+}
+
+.forum-v1 .fm-comment p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #28313c;
+  overflow-wrap: anywhere;
+}
+
+/* 窄手机视口：保持左右双区，只收紧字号与间距，不合并搜索栏 */
+@media (max-width: 430px) {
+  .forum-v1 .fm-columns {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  }
+  .forum-v1 .fm-topic > strong {
+    font-size: 11.5px;
+  }
+  .forum-v1 .fm-board small {
+    font-size: 8.5px;
+  }
+}

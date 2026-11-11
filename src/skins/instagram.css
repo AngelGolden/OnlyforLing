@@ -1,0 +1,719 @@
+/* AFTER THE LAST SET — Instagram App 界面样式。
+   独立前缀 igx-，与 AppSkins/Mymy 里旧的 .ig-* 样式互不干扰。
+   Instagram 保持浅色界面，不跟随手机的深色主题。 */
+
+.igx-ui {
+  position: relative;
+  background: #fff;
+  color: #111;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+    sans-serif;
+}
+.dark-phone .independent-skin.igx-ui {
+  background: #fff;
+  color: #111;
+}
+.igx-ui button {
+  color: #111;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.igx-ui input {
+  font: inherit;
+}
+
+/* ---------- 顶部 / 底部固定栏 ---------- */
+.igx-topbar,
+.igx-subhead {
+  flex-shrink: 0;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 13px;
+  border-bottom: 1px solid #efefef;
+  background: #fff;
+}
+.igx-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.igx-topbar-actions button,
+.igx-subhead button {
+  display: grid;
+  place-items: center;
+}
+.igx-logo {
+  font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive,
+    Georgia, serif;
+  font-size: 26px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+}
+.igx-subhead strong {
+  flex: 1;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+}
+.igx-subhead-right {
+  width: 24px;
+}
+.igx-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  background: #fff;
+  color: #111;
+  scrollbar-width: thin;
+}
+.dark-phone .igx-body {
+  background: #fff;
+  color: #111;
+}
+.igx-bottom {
+  flex-shrink: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #efefef;
+  background: #fff;
+}
+.dark-phone .igx-bottom {
+  background: #fff;
+}
+.igx-bottom > button {
+  flex: 1;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  opacity: 0.5;
+  color: #111;
+}
+.igx-bottom > button.on {
+  opacity: 1;
+}
+.igx-bottom > button.on .igx-avatar {
+  box-shadow: 0 0 0 2px #111;
+}
+
+/* ---------- 头像 ---------- */
+.igx-avatar {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #e6e6e6;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+}
+.igx-avatar-xs {
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+}
+.igx-avatar-sm {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+}
+.igx-avatar-md {
+  width: 44px;
+  height: 44px;
+  font-size: 17px;
+}
+.igx-avatar-lg {
+  width: 78px;
+  height: 78px;
+  font-size: 30px;
+}
+.igx-avatar-nav {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+}
+/* 未配置头像时统一使用同一枚默认占位图：尺寸、边框、内容位置完全一致。 */
+.igx-ui .igx-avatar-fallback {
+  background: #ececec;
+  border: 1px solid #dedede;
+  color: #b9b9b9;
+  box-sizing: border-box;
+}
+.igx-ui .igx-avatar-fallback svg {
+  width: 62%;
+  height: 62%;
+  fill: currentColor;
+}
+.igx-avatar-btn {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+/* ---------- 帖子卡片 ---------- */
+.igx-post {
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #efefef;
+  background: #fff;
+}
+.igx-post-detail {
+  margin: 0;
+  border-bottom: 0;
+}
+.igx-post-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+}
+.igx-post-who {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+.igx-username {
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  color: #111;
+}
+.igx-location {
+  font-size: 11.5px;
+  color: #111;
+}
+.igx-icon-btn {
+  display: grid;
+  place-items: center;
+  padding: 2px;
+}
+.igx-media-wrap {
+  position: relative;
+  width: 100%;
+}
+.igx-media {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  background: #f5f5f5;
+}
+.igx-media::-webkit-scrollbar {
+  display: none;
+}
+.igx-photo {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scroll-snap-align: start;
+  display: block;
+}
+.igx-video {
+  object-fit: contain;
+  background: #000;
+}
+.igx-media-count {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 14px;
+  background: #0009;
+  color: #fff;
+  font-size: 11px;
+}
+.igx-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  pointer-events: none;
+}
+.igx-ui .igx-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff80;
+  pointer-events: auto;
+}
+.igx-ui .igx-dot.on {
+  background: #fff;
+  box-shadow: 0 0 0 1px #0002;
+}
+.igx-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 9px 12px 5px;
+}
+.igx-actions .igx-save {
+  margin-left: auto;
+}
+.igx-likes {
+  padding: 0 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.igx-caption {
+  padding: 4px 12px 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  white-space: pre-line;
+  word-break: break-word;
+}
+.igx-ui .igx-mention {
+  color: #00376b;
+  font-size: inherit;
+  font-weight: 500;
+}
+.igx-comment-link,
+.igx-add-comment {
+  display: block;
+  padding: 5px 12px 0;
+  font-size: 13.5px;
+  text-align: left;
+  color: #737373;
+}
+.igx-time {
+  padding: 5px 12px 0;
+  font-size: 11px;
+  color: #8e8e8e;
+  letter-spacing: 0.1px;
+}
+.igx-detail-meta {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #8e8e8e;
+}
+.igx-empty {
+  padding: 26px 16px;
+  text-align: center;
+  color: #8e8e8e;
+  font-size: 13.5px;
+}
+
+/* ---------- 评论 ---------- */
+.igx-comments {
+  padding: 10px 12px 16px;
+}
+.igx-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+}
+.igx-comment-body {
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.igx-comment-body small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #8e8e8e;
+}
+.igx-caption-comment {
+  border-bottom: 1px solid #efefef;
+  padding-bottom: 13px;
+}
+.igx-composer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid #efefef;
+  background: #fff;
+}
+.dark-phone .igx-composer {
+  background: #fff;
+}
+.igx-composer input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  border-radius: 18px;
+  padding: 9px 13px;
+  background: #f1f1f1;
+  color: #111;
+  font-size: 13.5px;
+}
+.igx-composer button[type="submit"] {
+  color: #0095f6;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 6px 2px;
+}
+
+/* ---------- 个人主页 ---------- */
+.igx-profile {
+  background: #fff;
+}
+.igx-profile-top {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 16px 14px 8px;
+}
+.igx-stats {
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  text-align: center;
+}
+.igx-stats strong,
+.igx-stats span {
+  display: block;
+}
+.igx-stats strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+.igx-stats span {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: #111;
+}
+.igx-profile-bio {
+  padding: 4px 14px 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.igx-profile-bio > strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.igx-profile-actions {
+  padding: 0 14px 12px;
+}
+/* 选择器需强于 .igx-ui button 的通用重置，否则按钮背景会被清成透明。 */
+.igx-ui .igx-pill {
+  display: block;
+  width: 100%;
+  min-height: 32px;
+  border-radius: 8px;
+  background: #0095f6;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.igx-ui .igx-pill-muted {
+  background: #efefef;
+  color: #111;
+}
+.igx-profile-tabs {
+  display: flex;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+}
+.igx-profile-tabs span {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #8e8e8e;
+}
+.igx-profile-tabs span.on {
+  color: #111;
+  box-shadow: inset 0 -1.5px 0 #111;
+}
+.igx-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.igx-cell {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f2f2f2;
+  padding: 0;
+}
+.igx-cell img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.igx-cell-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: #fff;
+  filter: drop-shadow(0 1px 2px #0008);
+}
+.igx-cell-play {
+  top: auto;
+  bottom: 6px;
+}
+/* ---------- 搜索 / 私信 ----------
+   统一加 .igx-ui 前缀，避免全局 label / input / button 的基础样式
+   （column 方向、input 内边距、button padding: 0）覆盖这里的布局。 */
+.igx-ui .igx-search,
+.igx-ui .igx-dm {
+  padding: 0 0 16px;
+}
+.igx-saved {
+  padding: 10px 12px 16px;
+}
+
+/* 放大镜与输入框整合成一条 44px 高的横向搜索栏 */
+.igx-ui .igx-search-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 9px;
+  height: 44px;
+  margin: 12px 16px 0;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #efefef;
+  color: #8e8e8e;
+  font-size: 14px;
+  line-height: normal;
+  box-sizing: border-box;
+}
+.igx-ui .igx-search-icon {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  color: #8e8e8e;
+}
+.igx-ui .igx-search-field input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+  color: #111;
+  font-size: 14px;
+  line-height: normal;
+}
+.igx-ui .igx-search-field input:focus {
+  border: 0;
+  box-shadow: none;
+}
+.igx-ui .igx-search-field input::placeholder {
+  color: #8e8e8e;
+  opacity: 1;
+}
+.igx-ui .igx-search-clear {
+  display: grid;
+  place-items: center;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  color: #8e8e8e;
+  background: none;
+}
+.igx-ui .igx-section-title {
+  padding: 18px 16px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* 统一列表行：avatar | account-info | action */
+.igx-ui .igx-result {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 68px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #f2f2f2;
+  box-sizing: border-box;
+  text-align: left;
+  background: #fff;
+}
+.igx-ui .igx-result-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: #111;
+  text-align: left;
+}
+.igx-ui .igx-result-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.igx-ui .igx-result-info strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #111;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.igx-ui .igx-result-info small {
+  font-size: 12.5px;
+  line-height: 1.25;
+  color: #8e8e8e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.igx-ui .igx-result-action {
+  flex: 0 0 64px;
+  width: 64px;
+  display: flex;
+  justify-content: flex-end;
+}
+.igx-ui .igx-result-action button {
+  width: 62px;
+  height: 30px;
+  padding: 0;
+  border-radius: 8px;
+  background: #efefef;
+  color: #111;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.igx-conversation {
+  padding: 14px 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.igx-conversation-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: center;
+  font-size: 13.5px;
+}
+.igx-shared {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-end;
+  max-width: 82%;
+  padding: 7px;
+  border: 1px solid #efefef;
+  border-radius: 12px;
+  text-align: left;
+}
+.igx-shared img {
+  width: 46px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.igx-shared span {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.igx-shared small {
+  display: block;
+  color: #8e8e8e;
+}
+.igx-dm-bubble {
+  align-self: flex-end;
+  max-width: 78%;
+  padding: 9px 13px;
+  border-radius: 18px;
+  background: #3797f0;
+  color: #fff;
+  font-size: 13.5px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* ---------- 底部操作面板 ---------- */
+.igx-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  background: #0006;
+}
+.igx-sheet {
+  width: 100%;
+  max-height: 72%;
+  overflow-y: auto;
+  padding: 6px 0 10px;
+  border-radius: 14px 14px 0 0;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+.igx-sheet button {
+  padding: 13px 18px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.igx-sheet-title {
+  padding: 11px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #8e8e8e;
+}
+.igx-sheet-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.igx-ui .igx-sheet-cancel {
+  margin-top: 6px;
+  padding: 14px;
+  text-align: center;
+  font-weight: 600;
+  color: #111;
+  border-top: 6px solid #f3f3f3;
+  border-bottom: 0;
+}

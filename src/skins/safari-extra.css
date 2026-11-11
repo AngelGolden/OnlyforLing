@@ -1,0 +1,190 @@
+/* === Safari 浏览器（v1.0）扩展样式 === */
+.native-safari .catalog-scroll {
+  padding: 0 0 8px;
+}
+.safari-search-head {
+  font-size: 11px;
+  color: #8a8f98;
+  padding: 12px 16px 6px;
+}
+.safari-search-results {
+  display: block;
+}
+.safari-result {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 0;
+  border-bottom: 1px solid #e6e8eb;
+  padding: 11px 16px;
+  position: relative;
+}
+.safari-result strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+.safari-result small {
+  display: block;
+  font-size: 10px;
+  color: #8a8f98;
+  margin-top: 2px;
+}
+.safari-result .safari-ext {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b0b4ba;
+}
+.safari-page {
+  padding: 6px 0 16px;
+}
+.safari-page-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1c1c1e;
+  padding: 10px 16px 8px;
+}
+.safari-page-body {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #333;
+  padding: 0 16px;
+  white-space: pre-wrap;
+}
+.safari-ext-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 16px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 10px;
+  color: #2f6db3;
+  text-decoration: none;
+  font-size: 11px;
+  word-break: break-all;
+}
+.safari-ext-card span {
+  flex: 1;
+}
+.safari-ext-card svg:last-child {
+  color: #b0b4ba;
+  flex: none;
+}
+.safari-restaurants {
+  list-style: none;
+  margin: 0 16px;
+  padding: 0;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.safari-restaurants li {
+  padding: 11px 14px;
+  border-bottom: 1px solid #e6e8eb;
+  font-size: 12px;
+  color: #1c1c1e;
+}
+.safari-restaurants li:last-child {
+  border-bottom: 0;
+}
+.safari-history {
+  display: block;
+}
+.safari-hist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 0;
+  border-bottom: 1px solid #e6e8eb;
+  padding: 11px 16px;
+  color: #8a8f98;
+}
+.safari-hist-row strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+.safari-hist-row small {
+  display: block;
+  font-size: 9px;
+  color: #8a8f98;
+  margin-top: 2px;
+}
+.safari-hist-row div {
+  flex: 1;
+  min-width: 0;
+}
+.safari-hist-row time {
+  font-size: 9px;
+  color: #b0b4ba;
+  flex: none;
+}
+
+/* === WhatsApp 机主回复打字动画 === */
+.wa-typing-dots {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+.wa-typing-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9aa0a8;
+  display: inline-block;
+  animation: wa-dot 1.2s infinite ease-in-out;
+}
+.wa-typing-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.wa-typing-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes wa-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+.wa-caret {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background: #1c1c1e;
+  margin-left: 1px;
+  vertical-align: -2px;
+  animation: wa-blink 1s steps(1) infinite;
+}
+@keyframes wa-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.wa-fade {
+  animation: wa-fade-in 0.35s ease both;
+}
+@keyframes wa-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

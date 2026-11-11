@@ -1,0 +1,191 @@
+/* Notes 备忘录：可编辑的原生纸张视图。列表样式沿用 skins.css 的 .native-notes。 */
+.notes-editor {
+  position: relative;
+  background: #f4f3ee;
+}
+.notes-editor-nav {
+  background: #f4f3ee;
+  border: 0;
+  flex: none;
+}
+.notes-editor-nav button {
+  color: #bf8500;
+  font-size: 12px;
+  background: none;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+.notes-paper-scroll {
+  background: #fffdf8;
+}
+.notes-paper {
+  min-height: 100%;
+}
+.notes-paper > time {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  color: #8e8e93;
+  margin: 4px 0 18px;
+}
+.notes-paper h1 {
+  font-size: 23px;
+  line-height: 1.35;
+  font-weight: 700;
+  margin: 0 0 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.notes-body-view,
+.notes-body-input {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #2b2b2b;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.notes-line {
+  margin: 0;
+  min-height: 1.65em;
+}
+.notes-body-view strong {
+  font-weight: 700;
+}
+.notes-check-row {
+  display: flex;
+  align-items: flex-start;
+  /* 覆盖全局 button { justify-content: center }，保持原生清单左对齐 */
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 2px 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+}
+.notes-check-box {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  border: 1.5px solid #c9a227;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.notes-check-row.checked .notes-check-box {
+  background: #c9a227;
+  border-color: #c9a227;
+}
+.notes-check-row.checked .notes-check-text {
+  color: #9b9b98;
+  text-decoration: line-through;
+}
+.notes-title-input,
+.notes-body-input {
+  display: block;
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  color: inherit;
+  resize: none;
+}
+.notes-title-input {
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 14px;
+  padding: 0;
+}
+.notes-body-input {
+  min-height: 260px;
+  padding: 0;
+  white-space: pre-wrap;
+}
+.notes-editor-toolbar button {
+  color: #bf8500;
+  background: none;
+  border: 0;
+}
+.notes-delete-sheet {
+  min-width: 200px;
+  padding: 8px 0 0;
+}
+.notes-delete-sheet > small {
+  display: block;
+  padding: 8px 14px 10px;
+  font-size: 10px;
+  color: #777;
+}
+.notes-delete-sheet .notes-delete-confirm {
+  color: #e0453b;
+}
+.notes-compose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #bf8500;
+}
+
+/* 深色主题：纸张与文字一起反色，避免亮白块破坏沉浸感。 */
+.dark-phone .notes-editor,
+.dark-phone .notes-editor-nav {
+  background: #1c1c1e;
+}
+.dark-phone .notes-paper-scroll,
+.dark-phone .notes-paper {
+  background: #1c1c1e;
+}
+.dark-phone .notes-paper h1,
+.dark-phone .notes-body-view,
+.dark-phone .notes-body-input,
+.dark-phone .notes-title-input {
+  color: #ececec;
+}
+.dark-phone .notes-paper > time {
+  color: #8e8e93;
+}
+.dark-phone .notes-check-row.checked .notes-check-text {
+  color: #7d7d80;
+}
+.dark-phone .notes-check-box {
+  border-color: #d8b13a;
+}
+.dark-phone .notes-check-row.checked .notes-check-box {
+  background: #d8b13a;
+  border-color: #d8b13a;
+}
+.dark-phone .notes-editor-toolbar {
+  background: #252527;
+  border-top-color: #38383a;
+}
+.dark-phone .notes-delete-sheet {
+  background: #2c2c2ef5;
+}
+.dark-phone .notes-delete-sheet > button {
+  color: #0a84ff;
+}
+.dark-phone .notes-delete-sheet .notes-delete-confirm {
+  color: #ff6b63;
+}
+.dark-phone .notes-back,
+.dark-phone .notes-editor-nav button,
+.dark-phone .notes-editor-toolbar button,
+.dark-phone .notes-compose {
+  color: #d8b13a;
+}

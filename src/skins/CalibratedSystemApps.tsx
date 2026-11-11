@@ -116,7 +116,7 @@ export function HealthSkin(p: Props) {
             <h1>健康详细资料</h1>
             <section className="health-profile-empty">
               <User size={45} />
-              <h2>{p.owner || "机主"}</h2>
+              <h2>{p.owner || "我"}</h2>
               <p>尚未设置更多资料</p>
             </section>
           </>

@@ -31,6 +31,7 @@ import {
   useContent,
   type Props,
 } from "./shared";
+import { CampusForumSkin } from "./ForumCampus";
 function Actions({ p, item }: { p: Props; item: Item }) {
   const [liked, setLiked] = useSkinState<boolean>(p, `liked-${item.id}`, false),
     [saved, setSaved] = useSkinState<boolean>(p, `saved-${item.id}`, false);
@@ -522,6 +523,12 @@ function RedditPost({ p, item: i }: { p: Props; item: Item }) {
   );
 }
 export function ForumSkin(p: Props) {
+  // 作品没有自带论坛内容时（AFTER THE LAST SET），用预置的校园论坛固定数据；
+  // 有故事内容时保留原有的「帖子 / 版块」Tab 阅读行为，不影响既有作品的阅读事件。
+  if (!p.items.length) return <CampusForumSkin p={p} />;
+  return <CatalogForumSkin p={p} />;
+}
+function CatalogForumSkin({ p }: { p: Props }) {
   const { tab, setTab, q, setQ, items } = useContent(p, "帖子");
   const [board, setBoard] = useState("");
   const list = board

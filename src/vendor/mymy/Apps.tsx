@@ -86,7 +86,7 @@ export function MymyKakao(p: SkinProps) {
               title: entry[0],
               body: entry[1],
               time: entry[2],
-              sender: p.owner || "机主",
+              sender: p.owner || "我",
               outgoing: true,
               meta: { local: "true" },
             }),
@@ -476,7 +476,7 @@ export function MymyInstagram(p: SkinProps) {
           {!selected && tab === "个人主页" && (
             <>
               <div className="pf">
-                <Avatar name={p.owner || "机主"} />
+                <Avatar name={p.owner || "我"} />
                 <div className="ps">
                   <div>
                     <b>{posts.length}</b>

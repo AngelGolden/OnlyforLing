@@ -3,7 +3,6 @@ import {
   ChevronLeft,
   MoreHorizontal,
   Share,
-  Heart,
   Phone,
   MessageCircle,
   Video,
@@ -13,7 +12,10 @@ import {
   Check,
 } from "lucide-react";
 import { RichText } from "../RichText";
-import { safeMedia, type Item } from "../schema";
+import type { Item } from "../schema";
+import { PhotoDetail } from "../skins/photos-detail";
+import { resolvePhotos } from "../skins/photos-state";
+import "../skins/photos.css";
 export const nativeDetailApps = new Set([
   "notes",
   "photos",
@@ -32,24 +34,29 @@ export function NativeDetail({
   item: Item;
   back: () => void;
 }) {
-  const [favorite, setFavorite] = useState(item.favorite),
-    [copied, setCopied] = useState(false),
+  const [copied, setCopied] = useState(false),
     [call, setCall] = useState(false);
-  const media = safeMedia(item.media),
-    name =
-      app === "notes"
-        ? "备忘录"
-        : app === "contacts"
-          ? "通讯录"
-          : app === "photos"
-            ? "所有照片"
-            : app === "phone"
-              ? "最近通话"
-              : app === "calendar"
-                ? "日历"
-                : app === "files"
-                  ? "浏览"
-                  : "书签";
+
+  // 相册兜底详情：主路径是 PhotosSkin 内部详情（可编辑、可持久化）。
+  // 这里复用同一套视图，保证从其它入口进入 photos 详情时也显示真实大图
+  // 与该照片自己的拍摄信息，而不是占位文字；此路径只读，不写用户说明。
+  if (app === "photos")
+    return (
+      <PhotoDetail item={item} state={resolvePhotos(undefined)} back={back} />
+    );
+
+  const name =
+    app === "notes"
+      ? "备忘录"
+      : app === "contacts"
+        ? "通讯录"
+        : app === "phone"
+          ? "最近通话"
+          : app === "calendar"
+            ? "日历"
+            : app === "files"
+              ? "浏览"
+              : "书签";
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(item.body);
@@ -65,7 +72,7 @@ export function NativeDetail({
           <ChevronLeft size={24} />
           {name}
         </button>
-        <strong>{app === "photos" ? item.time.slice(0, 10) : ""}</strong>
+        <strong />
         <button aria-label="更多操作" onClick={() => setCopied(!copied)}>
           <MoreHorizontal size={23} />
         </button>
@@ -79,32 +86,7 @@ export function NativeDetail({
           <button onClick={() => setCopied(false)}>取消</button>
         </div>
       )}
-      {app === "photos" ? (
-        <>
-          <div className="native-photo-stage">
-            {media ? (
-              <img src={media} alt={item.title} />
-            ) : (
-              <div className="native-photo-caption">
-                <h2>{item.title}</h2>
-                <p>{item.body}</p>
-              </div>
-            )}
-          </div>
-          <footer className="native-detail-toolbar">
-            <button aria-label="分享照片说明" onClick={copy}>
-              <Share />
-            </button>
-            <button
-              aria-label="收藏照片"
-              onClick={() => setFavorite(!favorite)}
-            >
-              <Heart fill={favorite ? "#007aff" : "none"} />
-            </button>
-            <span>{copied ? "已复制" : item.title}</span>
-          </footer>
-        </>
-      ) : app === "contacts" || app === "phone" ? (
+      {app === "contacts" || app === "phone" ? (
         <div className="native-detail-scroll">
           <div className="native-contact-hero">
             <span>{item.title.slice(0, 1)}</span>
@@ -135,7 +117,7 @@ export function NativeDetail({
           </div>
           {call && (
             <div className="native-detail-group">
-              <p>作品内模拟 · {item.title}</p>
+              <p>通话记录 · {item.title}</p>
               <button onClick={() => setCall(false)}>结束</button>
             </div>
           )}

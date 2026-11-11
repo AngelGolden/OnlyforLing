@@ -13,7 +13,8 @@ describe("independent app coverage and authored attributes", () => {
       "calculator",
       "settings", "appstore",
     ];
-    expect(Object.keys(catalogSkins)).toHaveLength(44);
+    // 目录皮肤随此前任务新增一个 App 后为 45 个，保持断言与实际注册表一致。
+    expect(Object.keys(catalogSkins)).toHaveLength(45);
     for (const app of registry)
       expect(previous.includes(app.id) || app.id in catalogSkins).toBe(true);
   });

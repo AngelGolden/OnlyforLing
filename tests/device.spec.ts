@@ -89,14 +89,13 @@ test("device lock, automatic passcode, native settings, controls and keyboard wo
   await phone.screenshot({ path: "outputs/v0.5/wechat-list.png" });
   await phone.locator(".wx-chat-row").first().click();
   await phone.getByRole("button", { name: "输入消息", exact: true }).click();
-  await expect(phone.getByRole("dialog", { name: "屏幕键盘" })).toBeVisible();
-  await phone
-    .getByRole("dialog")
-    .getByRole("button", { name: "q", exact: true })
-    .click();
-  await expect(phone.getByRole("textbox", { name: "消息草稿" })).toHaveValue(
-    "q",
-  );
+  const kb = phone.locator(".device-keyboard");
+  await expect(kb).toBeVisible();
+  // v1.2：模拟键盘保留正常按键外观，但只做视觉呈现，不接收逐键输入。
+  await expect(kb).toHaveAttribute("data-visual-only", "1");
+  await kb.getByRole("button", { name: "q", exact: true }).click();
+  await expect(phone.getByRole("textbox", { name: "消息草稿" })).toHaveCount(0);
+  await expect(kb.locator(".keyboard-draft")).not.toContainText("q");
   await phone.screenshot({ path: "outputs/v0.5/keyboard.png" });
   await phone.getByRole("button", { name: "收起键盘" }).click();
   await expect(phone.locator(".device-keyboard")).toHaveCount(0);

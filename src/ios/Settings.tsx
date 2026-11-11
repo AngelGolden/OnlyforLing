@@ -22,6 +22,7 @@ import {
 import type { Work, Item } from "../schema";
 import { IOSToggle } from "../vendor/konsta/Toggle";
 import { NavigationPage, useNavigation } from "./Navigation";
+import "../skins/personalization.css";
 type Row = [ComponentType<{ size?: number }>, string, string];
 const groups: Row[][] = [
   [
@@ -64,6 +65,17 @@ export function NativeSettings({
     [wifi, setWifi] = useState(true),
     [bluetooth, setBluetooth] = useState(true),
     [lowPower, setLowPower] = useState(false);
+  // 设置页的账户展示名与头像是独立字段：owner 仍是聊天里的「我」，不动历史消息。
+  const accountName = work.phone.accountName?.trim() || work.phone.owner;
+  // 数据里存的是 /owner-media/...；GitHub Pages 子路径下根路径会指向站点根而 404，
+  // 渲染时转成 ./ 相对路径，本地与 /OnlyforLing/ 下都能加载。
+  const accountAvatar = /^\/owner-media\/[a-z0-9-]+\.(jpe?g|png|webp)$/i.test(
+    work.phone.accountAvatar ?? "",
+  )
+    ? `./${(work.phone.accountAvatar as string).slice(1)}`
+    : "";
+  const publicWifi = work.phone.publicWifi?.trim() ?? "";
+  const bluetoothDevices = work.phone.bluetoothDevices ?? [];
   const row = (label: string, value?: string, click?: () => void) => (
     <button key={label} className="settings-native-row" onClick={click}>
       <span>{label}</span>
@@ -78,6 +90,17 @@ export function NativeSettings({
     </div>
   );
   const sub = () => {
+    if (nav.page === accountName) {
+      return (
+        <div className="settings-group settings-account-detail">
+          <span className={accountAvatar ? "has-photo" : ""}>
+            {accountAvatar ? <img src={accountAvatar} alt="" /> : accountName.slice(0, 1)}
+          </span>
+          <strong>{accountName}</strong>
+          <small>Apple 账户、iCloud 与更多</small>
+        </div>
+      );
+    }
     switch (nav.page) {
       case "通用":
         return (
@@ -92,7 +115,10 @@ export function NativeSettings({
       case "关于本机":
         return (
           <div className="settings-group">
-            {row("名称", work.phone.owner + "的 iPhone")}
+            {row(
+              "名称",
+              `${accountName}${/[A-Za-z]$/.test(accountName) ? " " : ""}的 iPhone`,
+            )}
             {row("iOS 版本", "18.0")}
             {row("机型名称", "iPhone 15 Pro")}
             {row("照片", String(work.data.photos?.length || 0))}
@@ -119,8 +145,25 @@ export function NativeSettings({
                     <Wifi size={18} />
                   </div>
                 </div>
+                {publicWifi && (
+                  <>
+                    <p className="settings-section-label settings-section-label-own">
+                      公用网络
+                    </p>
+                    <div className="settings-group">
+                      <div
+                        className="settings-native-row"
+                        data-settings-public-wifi={publicWifi}
+                      >
+                        <Wifi size={18} color="#007aff" />
+                        <span>{publicWifi}</span>
+                        <small>可用</small>
+                      </div>
+                    </div>
+                  </>
+                )}
                 <p className="settings-page-caption">
-                  连接状态仅用于作品中的虚拟手机。
+                  连接状态仅用于本机。
                 </p>
               </>
             )}
@@ -132,8 +175,28 @@ export function NativeSettings({
             <div className="settings-group">
               {toggle("蓝牙", bluetooth, setBluetooth)}
             </div>
+            {bluetooth && bluetoothDevices.length > 0 && (
+              <>
+                <p className="settings-section-label settings-section-label-own">
+                  我的设备
+                </p>
+                <div className="settings-group">
+                  {bluetoothDevices.map((device) => (
+                    <div
+                      className="settings-native-row"
+                      key={device}
+                      data-settings-bluetooth-device={device}
+                    >
+                      <Bluetooth size={18} color="#007aff" />
+                      <span>{device}</span>
+                      <small>已连接</small>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             <p className="settings-page-caption">
-              {bluetooth ? "我的设备" : "蓝牙已关闭"}
+              {bluetooth ? "设备连接状态仅用于本机。" : "蓝牙已关闭"}
             </p>
           </>
         );
@@ -168,7 +231,7 @@ export function NativeSettings({
       case "软件更新":
         return (
           <p className="settings-page-caption">
-            iOS 18.0 · 此为作品中的虚拟系统，不下载系统更新。
+            iOS 18.0 · 不下载系统更新。
           </p>
         );
       default:
@@ -185,7 +248,7 @@ export function NativeSettings({
               )}
             </div>
             {!items.some((i) => i.folder === nav.page) && (
-              <p className="settings-page-caption">此作品没有配置更多选项。</p>
+              <p className="settings-page-caption">没有更多选项。</p>
             )}
           </>
         );
@@ -206,11 +269,17 @@ export function NativeSettings({
             {!query && (
               <button
                 className="settings-account"
-                onClick={() => nav.push(work.phone.owner)}
+                onClick={() => nav.push(accountName)}
               >
-                <span>{work.phone.owner.slice(0, 1)}</span>
+                <span className={accountAvatar ? "has-photo" : ""}>
+                  {accountAvatar ? (
+                    <img src={accountAvatar} alt="" />
+                  ) : (
+                    accountName.slice(0, 1)
+                  )}
+                </span>
                 <div>
-                  <strong>{work.phone.owner}</strong>
+                  <strong>{accountName}</strong>
                   <small>Apple 账户、iCloud 与更多</small>
                 </div>
                 <ChevronRight size={17} />

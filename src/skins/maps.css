@@ -1,0 +1,371 @@
+/* 地图 App：交互式模拟地图（SVG 底图 + 可点击标记 + 搜索）。 */
+.maps-ui {
+  --map-land: #eceee3;
+  --map-water: #b6d7e2;
+  --map-water-label: #8fb4c2;
+  --map-road: #ffffff;
+  --map-arterial: #f6d66f;
+  --map-campus: #cfe0c1;
+  --map-building: #b9d0a8;
+  --map-field: #d9e4c4;
+  --map-field-edge: #b6cba2;
+  --map-commercial: #e8d7b8;
+  --map-commercial-label: #9b865a;
+  --map-block: #d5dcc8;
+  --map-block-label: #7d8a74;
+  --map-residential: #e1e5da;
+  --map-residential-edge: #d3d8cb;
+  --map-label: #9aa08f;
+  --map-surface: #ffffff;
+  --map-panel: #fafafa;
+  --map-field-bg: #ededf0;
+  --map-ink: #18181b;
+  --map-ink-soft: #6b6b70;
+  --map-line: #ecedf0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--map-land);
+  color: var(--map-ink);
+}
+/* 深色主题：地图与面板跟随手机主题（与浏览器/信息等 App 保持一致）。 */
+.dark-phone .maps-ui {
+  --map-land: #23262b;
+  --map-water: #1b3441;
+  --map-water-label: #5d8494;
+  --map-road: #3b3f46;
+  --map-arterial: #7a6a3a;
+  --map-campus: #2f3d31;
+  --map-building: #39492f;
+  --map-field: #35432f;
+  --map-field-edge: #45543a;
+  --map-commercial: #3a3327;
+  --map-commercial-label: #a08f63;
+  --map-block: #31383a;
+  --map-block-label: #8b948a;
+  --map-residential: #2e3238;
+  --map-residential-edge: #3a3f46;
+  --map-label: #767d84;
+  --map-surface: #1c1c1e;
+  --map-panel: #1c1c1e;
+  --map-field-bg: #2c2c2e;
+  --map-ink: #f2f2f7;
+  --map-ink-soft: #9a9aa0;
+  --map-line: #333336;
+}
+
+/* ---------- 底图 ---------- */
+.maps-canvas {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  cursor: grab;
+  overflow: hidden;
+}
+.maps-canvas:active {
+  cursor: grabbing;
+}
+.maps-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+}
+.maps-marker {
+  cursor: pointer;
+  outline: none;
+}
+.maps-marker:focus-visible .maps-marker-ring {
+  stroke: #007aff;
+  stroke-width: 3;
+}
+.maps-marker:hover {
+  filter: brightness(1.06);
+}
+
+/* ---------- 首页浮层 ---------- */
+.maps-search-pill {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  z-index: 3;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--map-surface);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.14),
+    0 6px 18px rgba(0, 0, 0, 0.1);
+  color: var(--map-ink-soft);
+  font-size: 15px;
+  text-align: left;
+}
+.maps-search-pill span {
+  color: var(--map-ink-soft);
+  opacity: 0.7;
+}
+.maps-controls {
+  position: absolute;
+  right: 14px;
+  bottom: 108px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+.maps-controls button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: var(--map-surface);
+  color: var(--map-ink);
+  border-bottom: 1px solid var(--map-line);
+}
+.maps-controls button:last-child {
+  border-bottom: 0;
+}
+.maps-home-hint {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--map-surface);
+  color: var(--map-ink-soft);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+/* ---------- 地点卡片 ---------- */
+.maps-place-card {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 14px;
+  z-index: 3;
+  padding: 14px 40px 15px 16px;
+  border-radius: 15px;
+  background: var(--map-surface);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+}
+.maps-place-card.static {
+  position: static;
+  box-shadow: none;
+  padding: 16px;
+  background: var(--map-surface);
+}
+.maps-place-card strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.maps-place-card small {
+  display: inline-block;
+  margin: 4px 0 0;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--map-field-bg);
+  color: var(--map-ink-soft);
+  font-size: 11px;
+}
+.maps-place-card p {
+  margin: 8px 0 0;
+  color: var(--map-ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.maps-card-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--map-field-bg);
+  color: var(--map-ink-soft);
+}
+
+/* ---------- 搜索 / 结果面板 ---------- */
+.maps-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  background: var(--map-surface);
+}
+.maps-panel-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--map-line);
+  background: var(--map-panel);
+}
+.maps-panel-nav > button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: var(--map-field-bg);
+  color: var(--map-ink);
+}
+.maps-panel-nav .maps-search-field {
+  flex: 1;
+  min-width: 0;
+}
+.maps-result-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+.maps-search-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  padding: 0 9px;
+  border-radius: 9px;
+  background: var(--map-field-bg);
+  color: var(--map-ink-soft);
+}
+.maps-search-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  padding: 8px 0;
+  font-size: 15px;
+  color: var(--map-ink);
+}
+.maps-search-field button {
+  border: 0;
+  background: none;
+  color: var(--map-ink-soft);
+  display: grid;
+  place-items: center;
+}
+/* 分组标题：覆盖全局 .native-section 在深色主题下的样式 */
+.maps-panel .native-section {
+  background: var(--map-field-bg);
+  color: var(--map-ink-soft);
+  font-size: 12px;
+  padding: 9px 16px;
+  margin: 0;
+}
+.maps-panel-scroll,
+.maps-result-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 0 24px;
+}
+.maps-result-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.maps-result-body .maps-canvas {
+  position: relative;
+  flex: 0 0 42%;
+  inset: auto;
+  border-bottom: 1px solid #e6e7ea;
+}
+.maps-recent {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.maps-recent-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--map-line);
+  background: none;
+  color: var(--map-ink);
+  font-size: 15px;
+  text-align: left;
+}
+.maps-recent-row span {
+  color: var(--map-ink-soft);
+  font-size: 11px;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ---------- 餐厅类别 ---------- */
+.maps-category-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.maps-category-row::-webkit-scrollbar {
+  display: none;
+}
+.maps-category {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--map-line);
+  border-radius: 999px;
+  background: var(--map-surface);
+  color: var(--map-ink);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.maps-category.selected {
+  border-color: #007aff;
+  color: #007aff;
+  background: rgba(0, 122, 255, 0.1);
+}
+.maps-category-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.maps-result-note {
+  margin: 12px 16px;
+  color: var(--map-ink-soft);
+  font-size: 13px;
+  line-height: 1.55;
+}

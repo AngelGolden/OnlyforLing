@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Phone } from "../Phone";
+import { db } from "../persistence";
 import { validateWork, type Work } from "../schema";
 import "../styles.css";
 import "./player.css";
@@ -9,20 +10,33 @@ function StoryPlayer() {
     [error, setError] = useState("");
   useEffect(() => {
     const abort = new AbortController();
-    fetch(
-      new URLSearchParams(location.search).get("preview") === "test"
+    const params = new URLSearchParams(location.search);
+    // ?fresh=1：清掉这部作品的玩家进度，以刚捡到手机的初始状态打开。
+    const fresh = params.get("fresh") === "1";
+    const source =
+      params.get("preview") === "test"
         ? "./test-work.json"
-        : new URLSearchParams(location.search).get("template") === "blank"
+        : params.get("template") === "blank"
           ? "./blank-work.json"
-          : "./work.json",
-      { signal: abort.signal },
-    )
+          : "./work.json";
+    fetch(source, { signal: abort.signal })
       .then((r) => {
         if (!r.ok) throw Error("缺少作品文件，请运行 npm run story:build");
         return r.json();
       })
-      .then((x) => {
+      .then(async (x) => {
         const w = validateWork(x);
+        if (fresh) {
+          await db.saves.delete(w.id).catch(() => undefined);
+          // 移除参数，避免本次流程中刷新页面被反复重置；想重来时再打开带参数的地址。
+          params.delete("fresh");
+          const rest = params.toString();
+          history.replaceState(
+            null,
+            "",
+            location.pathname + (rest ? "?" + rest : "") + location.hash,
+          );
+        }
         document.title =
           w.title === "捡手机" ? "捡手机" : w.title + " · 捡手机";
         setWork(w);

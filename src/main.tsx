@@ -496,7 +496,7 @@ function Studio() {
                       <Smartphone size={16} />
                     </span>
                     <span>
-                      机主与锁屏<small>{work.phone.owner} 的 iPhone</small>
+                      我与锁屏<small>{work.phone.owner} 的 iPhone</small>
                     </span>
                     <ChevronRight size={15} />
                   </button>

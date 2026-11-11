@@ -240,49 +240,112 @@ export function NeteaseSkin(p: Props) {
     </div>
   );
 }
+/**
+ * 本地静态视频资源白名单：与 Photos 的 photo-media 做法一致，
+ * 只允许 ./yt-media/ 下的 ASCII 文件名，避免把任意 URL 注入 <video>/<img>。
+ */
+const YT_ASSET_RE = /^\.\/yt-media\/[a-z0-9-]+\.(mp4|jpg)$/i;
+const ytAsset = (i: Item, key: "video" | "poster") => {
+  const value = i.meta?.[key] ?? "";
+  return YT_ASSET_RE.test(value) ? value : "";
+};
+/** Shorts 用 folder 分组（沿用现有 Shorts 标签的筛选），不新增数据结构。 */
+const SHORTS_FOLDER = "Shorts";
+const isShorts = (i: Item) => i.folder === SHORTS_FOLDER;
+
 export function YouTubeSkin(p: Props) {
   const { tab, setTab, q, setQ, items } = useContent(p, "首页");
   const [category, setCategory] = useState("全部");
+  const [playing, setPlaying] = useState<Item | null>(null);
   const list = items.filter((i) =>
     tab === "Shorts"
-      ? i.folder === "Shorts"
+      ? isShorts(i)
       : tab === "订阅"
         ? i.folder === "订阅"
         : tab === "播放列表"
           ? i.favorite || i.folder === "播放列表"
-          : category === "全部" || i.folder === category,
+          : // 首页与分类筛选只放常规视频，Shorts 专属标签独立承载短视频。
+            !isShorts(i) && (category === "全部" || i.folder === category),
   );
+  /** 有本地视频的条目在 Skin 内播放；其余条目仍走原有通用详情路径。 */
+  const open = (i: Item) =>
+    ytAsset(i, "video") ? setPlaying(i) : p.onItem(i);
+
+  if (playing) {
+    const src = ytAsset(playing, "video");
+    return (
+      <div
+        className={`catalog-skin youtube-ui youtube-player${isShorts(playing) ? " is-shorts" : ""}`}
+      >
+        <Header p={{ ...p, onBack: () => setPlaying(null) }} />
+        <div className="youtube-player-scroll">
+          <video
+            className="youtube-player-video"
+            data-video-title={playing.title}
+            src={src}
+            controls
+            autoPlay
+            playsInline
+            preload="metadata"
+          />
+          <div className="youtube-player-byline">
+            <strong>{playing.title}</strong>
+            <small>
+              {playing.sender}
+              {meta(playing, "duration")
+                ? ` · ${meta(playing, "duration")}`
+                : ""}
+            </small>
+          </div>
+          {playing.body && <p>{playing.body}</p>}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="catalog-skin youtube-ui">
       <Header p={p} />
       <SearchBox value={q} set={setQ} />
       <div className="youtube-chips">
-        {["全部", ...groupItems(items).filter((g) => g !== "未分类")].map(
-          (g) => (
-            <button
-              className={category === g ? "selected" : ""}
-              key={g}
-              onClick={() => setCategory(g)}
-            >
-              {g}
-            </button>
+        {[
+          "全部",
+          ...groupItems(items).filter(
+            (g) => g !== "未分类" && g !== SHORTS_FOLDER,
           ),
-        )}
+        ].map((g) => (
+          <button
+            className={category === g ? "selected" : ""}
+            key={g}
+            onClick={() => setCategory(g)}
+          >
+            {g}
+          </button>
+        ))}
       </div>
       <div className="catalog-scroll">
         <div className={tab === "Shorts" ? "youtube-shorts" : "youtube-videos"}>
           {list.map((i) => (
-            <article key={i.id}>
-              <button className="youtube-thumb" onClick={() => p.onItem(i)}>
-                <Media item={i} />
+            <article key={i.id} data-video-id={i.id}>
+              <button
+                className="youtube-thumb"
+                aria-label={`播放 ${i.title}`}
+                onClick={() => open(i)}
+              >
+                {ytAsset(i, "poster") ? (
+                  <img src={ytAsset(i, "poster")} alt="" />
+                ) : (
+                  <Media item={i} />
+                )}
                 {meta(i, "duration") && <time>{meta(i, "duration")}</time>}
               </button>
-              <button className="youtube-byline" onClick={() => p.onItem(i)}>
+              <button className="youtube-byline" onClick={() => open(i)}>
                 <Avatar name={i.sender} />
                 <div>
                   <strong>{i.title}</strong>
                   <small>
-                    {i.sender} · {meta(i, "views", "—")} 次播放
+                    {i.sender}
+                    {meta(i, "views") ? ` · ${meta(i, "views")} 次播放` : ""}
                   </small>
                 </div>
               </button>

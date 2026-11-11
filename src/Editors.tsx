@@ -359,7 +359,7 @@ export function PhoneSettings({
       <div className="editor-fields">
         <div className="two-cols">
           <label>
-            机主名称
+            我的名字
             <input
               value={draft.owner}
               onChange={(e) => set({ ...draft, owner: e.target.value })}
@@ -504,7 +504,7 @@ export function BatchImport({
           </label>
         </div>
         <label>
-          代表机主的发送者
+          代表自己的发送者
           <input value={me} onChange={(e) => setMe(e.target.value)} />
         </label>
         <textarea rows={8} value={text} onChange={(e) => set(e.target.value)} />

@@ -64,7 +64,7 @@ it("blank default has no story and needs no ending test", () => {
     scriptVersion: 1,
     id: "blank-test",
     title: "捡手机",
-    phone: { owner: "机主" },
+    phone: { owner: "我" },
   });
   expect(work.nodes).toEqual([]);
   expect(Object.values(work.data).flat()).toEqual([]);

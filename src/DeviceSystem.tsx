@@ -39,22 +39,54 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import type { Work } from "./schema";
-export const KeyboardContext = createContext<(open: boolean) => void>(() => {});
+/**
+ * 模拟键盘的一次会话。
+ * v1.2：键盘只负责 iOS 即时通讯的视觉呈现，不接收玩家逐键输入，
+ * 也不再复制一份剧本草稿（长文本重复/叠压的来源）。
+ * 预设回复由 WhatsAppSkin 逐字写入真实输入框状态；会话仅保留收起键盘的回调，
+ * 供剧本在中断时保存打字进度（绝不发送、绝不推进播放游标）。
+ */
+export type KeyboardSession = {
+  /** 键盘被收起（未发送）时回调：保存进度，不写聊天历史 */
+  onClose?: () => void;
+};
+export type KeyboardControl = (open: boolean, session?: KeyboardSession) => void;
+export const KeyboardContext = createContext<KeyboardControl>(() => {});
 export function NativeComposer({
   creator,
   onAdd,
+  value = "",
+  onActivate,
+  caret = false,
+  focused = false,
 }: {
   creator: boolean;
   onAdd: () => void;
+  /** 输入框内的真实草稿值（系统自动逐字写入，不是已发送的消息） */
+  value?: string;
+  /** 点击输入框时回调；提供时不再走默认的「打开普通键盘」 */
+  onActivate?: () => void;
+  /** 是否显示跟随文字末尾移动的输入光标 */
+  caret?: boolean;
+  /** 模拟键盘是否弹出（输入框获得焦点） */
+  focused?: boolean;
 }) {
   const open = useContext(KeyboardContext);
   return (
     <button
-      className="native-compose-field"
+      className={`native-compose-field${value ? " has-draft" : ""}`}
       aria-label={creator ? "添加消息" : "输入消息"}
-      onClick={() => (creator ? onAdd() : open(true))}
+      data-focused={focused ? "1" : undefined}
+      onClick={() =>
+        creator ? onAdd() : onActivate ? onActivate() : open(true)
+      }
     >
-      {creator ? "添加消息" : ""}
+      {creator ? "添加消息" : (
+        <>
+          {value}
+          {caret && <span className="wa-caret" aria-hidden="true" />}
+        </>
+      )}
     </button>
   );
 }
@@ -69,6 +101,7 @@ export function DeviceLock({
   onUnlock,
   onCamera,
   onLight,
+  onNoticeOpen,
 }: {
   work: Work;
   time: string;
@@ -80,6 +113,7 @@ export function DeviceLock({
   onUnlock: (v: string) => void;
   onCamera: () => void;
   onLight: () => void;
+  onNoticeOpen?: (target?: string, index?: number) => void;
 }) {
   const [code, setCode] = useState("");
   useEffect(() => {
@@ -130,7 +164,10 @@ export function DeviceLock({
                 compact
                 notices={notices}
                 apps={work.apps}
-                onOpen={open}
+                onOpen={(target, index) => {
+                  if (onNoticeOpen) onNoticeOpen(target, index);
+                  else open();
+                }}
                 onDismiss={onDismiss}
               />
             )}
@@ -392,7 +429,7 @@ export function ControlCenter({
         <div className="cc-tool">
           <strong>{tool}</strong>
           <p>
-            {tool === "屏幕镜像" ? "正在搜索作品中的设备…" : "作品内快捷控制"}
+            {tool === "屏幕镜像" ? "正在搜索附近的设备…" : "快捷控制"}
           </p>
           <button onClick={() => setTool("")}>完成</button>
         </div>
@@ -404,32 +441,34 @@ export function ControlCenter({
     </motion.div>
   );
 }
+/**
+ * 复用的模拟 iOS 键盘（v1.2 起为纯视觉壳）。
+ * 按键保持正常外观，但不再接收逐键输入、不再有可编辑草稿区或候选词追加，
+ * 因此不会出现「同一句预设文字在输入框和键盘里重复、并与 QWERTY 行叠压」。
+ * 系统自动输入的文字只存在于 WhatsApp 底部输入框的真实 draftValue 状态里。
+ */
 export function DeviceKeyboard({ close }: { close: () => void }) {
-  const [value, setValue] = useState(""),
-    [shift, setShift] = useState(false),
+  const [shift, setShift] = useState(false),
     [numbers, setNumbers] = useState(false);
   return (
-    <div className="device-keyboard" role="dialog" aria-label="屏幕键盘">
+    <div
+      className="device-keyboard"
+      role="dialog"
+      aria-label="屏幕键盘"
+      data-visual-only="1"
+    >
       <div className="keyboard-draft">
-        <input
-          autoFocus
-          aria-label="消息草稿"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="输入消息"
-        />
+        <span className="keyboard-hint" aria-hidden="true" />
         <button aria-label="收起键盘" onClick={close}>
           <ChevronDown />
         </button>
       </div>
       <div className="keyboard-candidates">
-        {(value ? [value, "好的", "知道了"] : ["我", "你", "好的"]).map(
-          (v, i) => (
-            <button key={i} onClick={() => setValue(value + v)}>
-              {v}
-            </button>
-          ),
-        )}
+        {["我", "你", "好的"].map((v, i) => (
+          <button key={i} type="button" tabIndex={-1}>
+            {v}
+          </button>
+        ))}
       </div>
       {(numbers
         ? ["1234567890", "-/:;()¥&@", ".,?!'"]
@@ -439,6 +478,8 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
           {i === 2 && (
             <button
               className="key-special"
+              type="button"
+              tabIndex={-1}
               aria-label="切换大小写"
               onClick={() => setShift(!shift)}
             >
@@ -446,18 +487,16 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
             </button>
           )}
           {[...row].map((k) => (
-            <button
-              key={k}
-              onClick={() => setValue(value + (shift ? k.toUpperCase() : k))}
-            >
+            <button key={k} type="button" tabIndex={-1}>
               {shift ? k.toUpperCase() : k}
             </button>
           ))}
           {i === 2 && (
             <button
               className="key-special"
+              type="button"
+              tabIndex={-1}
               aria-label="退格"
-              onClick={() => setValue(value.slice(0, -1))}
             >
               <Delete size={20} />
             </button>
@@ -465,13 +504,15 @@ export function DeviceKeyboard({ close }: { close: () => void }) {
         </div>
       ))}
       <div className="keyboard-row keyboard-bottom">
-        <button onClick={() => setNumbers(!numbers)}>
+        <button type="button" tabIndex={-1} onClick={() => setNumbers(!numbers)}>
           {numbers ? "ABC" : "123"}
         </button>
-        <button className="key-space" onClick={() => setValue(value + " ")}>
+        <button className="key-space" type="button" tabIndex={-1}>
           空格
         </button>
-        <button onClick={close}>完成</button>
+        <button type="button" tabIndex={-1} onClick={close}>
+          完成
+        </button>
       </div>
       <div className="keyboard-accessories">
         <Globe size={24} />

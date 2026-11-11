@@ -85,6 +85,21 @@ try {
   const { compileStory, storySchema } = await server.ssrLoadModule(
     "/src/story-engine/compiler.ts",
   );
+  // 探索触发系统：剧情只能由玩家行为触发，禁止任何基于时间流逝的触发。
+  // 手机时钟仍可显示现实时间，但不能决定任何消息/内容是否出现。
+  const timeTriggers = [];
+  for (const [i, n] of (raw.events ?? []).entries()) {
+    if (n.delayMs !== undefined)
+      timeTriggers.push(`events.${i}.delayMs: 禁止延时触发`);
+    if (n.type === "delay")
+      timeTriggers.push(`events.${i}.type: 禁止 delay 节点`);
+    if (n.event === "time" || n.event === "timer")
+      timeTriggers.push(`events.${i}.event: 禁止时钟事件触发`);
+    for (const [j, a] of (n.actions ?? []).entries())
+      if (a.type === "time" || a.type === "date")
+        timeTriggers.push(`events.${i}.actions.${j}.type: 禁止改写系统时间`);
+  }
+  if (timeTriggers.length) throw Error(timeTriggers.join("\n"));
   const { story, work } = compileStory(raw);
   if (mode === "test" || mode === "build") {
     const { testStory } = await server.ssrLoadModule(

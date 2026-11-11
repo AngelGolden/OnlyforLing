@@ -14,13 +14,13 @@ test("creator edits, saves, restores, exports and reimports", async ({
     fullPage: true,
   });
   await page.getByRole("button", { name: "手机设置", exact: true }).click();
-  await page.getByLabel("机主名称").fill("测试机主");
+  await page.getByLabel("我的名字").fill("测试用户");
   await page.getByRole("button", { name: "选择sand壁纸" }).click();
   await page.getByRole("button", { name: "保存设置", exact: true }).click();
-  await expect(page.getByText("测试机主 的 iPhone")).toBeVisible();
+  await expect(page.getByText("测试用户 的 iPhone")).toBeVisible();
   await page.getByRole("button", { name: "已保存到本机" }).click();
   await page.reload();
-  await expect(page.getByText("测试机主 的 iPhone")).toBeVisible();
+  await expect(page.getByText("测试用户 的 iPhone")).toBeVisible();
   await page.getByRole("button", { name: "批量导入聊天记录" }).click();
   await page.getByRole("button", { name: "确认导入", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("2 条");
@@ -37,7 +37,7 @@ test("creator edits, saves, restores, exports and reimports", async ({
   const file = await downloaded;
   const zip = await JSZip.loadAsync(await readFile((await file.path())!));
   const w = JSON.parse(await zip.file("work.json")!.async("string"));
-  expect(w.phone.owner).toBe("测试机主");
+  expect(w.phone.owner).toBe("测试用户");
   expect(
     w.data.messages.some((i: { body: string }) =>
       i.body.includes("浏览器验证"),

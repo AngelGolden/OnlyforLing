@@ -1,0 +1,82 @@
+/* 系统设置个性化：机主账户头像、公用 WiFi / 蓝牙设备、时钟与日历的补充行。
+   只做局部样式，不改既有 .ios18 / .catalog-skin 的深浅主题规则。 */
+
+/* 设置首页账户卡片：保留原有圆形占位结构，有图片时只替换成真实头像。 */
+.ios18 .settings-account > span.has-photo {
+  background: transparent;
+}
+.ios18 .settings-account > span > img,
+.ios18 .settings-account-detail > span > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* 点击账户卡片后的 Apple 账户详情。 */
+.ios18 .settings-account-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  text-align: center;
+}
+.ios18 .settings-account-detail > span {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #a4a9b1;
+  color: #fff;
+  font-size: 34px;
+}
+.ios18 .settings-account-detail > span.has-photo {
+  background: transparent;
+}
+.ios18 .settings-account-detail strong {
+  font-size: 20px;
+  font-weight: 500;
+}
+.ios18 .settings-account-detail small {
+  color: var(--ios-secondary);
+  font-size: 13px;
+}
+
+/* 时钟：世界时钟的时区行比闹钟时间小，重复/时差说明用次要小字。 */
+.alarm-row time.alarm-zone {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.alarm-row small.alarm-sub {
+  color: #8a8a8e;
+}
+.light-phone .alarm-row small.alarm-sub {
+  color: #6d6d72;
+}
+
+/* 本轮新增的两个分组标签：tokens.css 的 -14px 下外边距会把标签压到
+   下一组卡片下面（DOM 可见但视觉被遮挡），只在这里把新增标签扶正，
+   不动既有「我的网络」等分组，避免影响其它设置页。 */
+.ios18 .settings-section-label.settings-section-label-own {
+  margin-bottom: 6px;
+}
+
+/* 日历：特别提醒徽标，沿用日历自身的强调红。 */
+.calendar-special {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #e96360;
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5;
+  vertical-align: middle;
+}

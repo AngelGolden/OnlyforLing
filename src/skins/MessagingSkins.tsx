@@ -270,12 +270,12 @@ export function TelegramSkin(p: Props) {
 export function DiscordSkin(p: Props) {
   const { tab, setTab, items } = useContent(p, "频道");
   const servers = [
-    ...new Set(items.map((i) => meta(i, "server", "故事服务器"))),
+    ...new Set(items.map((i) => meta(i, "server", "服务器"))),
   ];
   const [server, setServer] = useState(""),
     [channel, setChannel] = useState("");
   const current = server || servers[0] || "服务器";
-  const list = items.filter((i) => meta(i, "server", "故事服务器") === current);
+  const list = items.filter((i) => meta(i, "server", "服务器") === current);
   const channels = groupItems(list, "general");
   const active = channel || channels[0] || "general";
   const messages = list.filter((i) => (i.folder || "general") === active);
@@ -342,7 +342,7 @@ export function DiscordSkin(p: Props) {
                         {meta(
                           list.find((i) => i.sender === s)!,
                           "status",
-                          "虚构成员",
+                          "成员",
                         )}
                       </small>
                     </span>

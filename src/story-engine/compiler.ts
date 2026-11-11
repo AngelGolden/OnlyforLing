@@ -68,6 +68,10 @@ export const storySchema = z
           app: z.string().default("messages"),
           title: z.string(),
           participants: z.array(z.string()),
+          /** direct = 私聊；group = 群组聊天（气泡显示成员名字、使用专属群头像）。 */
+          kind: z.enum(["direct", "group"]).default("direct"),
+          /** 群聊专属头像：/wa-media/ 下的本地静态图，避免把大图内联进 work.json。 */
+          groupAvatar: z.string().default(""),
           messages: z.array(
             content.extend({ senderId: z.string().optional() }),
           ),
@@ -181,6 +185,12 @@ export function compileStory(raw: unknown): { story: Story; work: Work } {
     unique(chat.id, `chats.${n}.id`);
     if (!registry.some((a) => a.id === chat.app && a.engine === "messaging"))
       fail(`chats.${n}.app`, "需要聊天 App");
+    // 群头像只允许项目内的本地静态资源，防止远程图片 / 脚本 URL 进入渲染层。
+    if (
+      chat.groupAvatar &&
+      !/^\/wa-media\/[a-z0-9-]+\.(jpe?g|png|webp)$/i.test(chat.groupAvatar)
+    )
+      fail(`chats.${n}.groupAvatar`, "群头像只允许 /wa-media/ 下的本地图片");
     chat.participants.forEach((c, j) => {
       if (!contacts.has(c) && c !== "owner")
         fail(`chats.${n}.participants.${j}`, "联系人不存在: " + c);
@@ -201,13 +211,20 @@ export function compileStory(raw: unknown): { story: Story; work: Work } {
           sender:
             senderId === "owner"
               ? s.phone.owner
-              : contacts.get(senderId || "")?.name || m.sender || s.phone.owner,
+              : // 单条消息可显式指定聊天界面发信人（如 IG-001 的「鄺學姐」），
+                // 不指定时仍沿用联系人名称，既有聊天记录不受影响。
+                m.sender ||
+                contacts.get(senderId || "")?.name ||
+                s.phone.owner,
           avatar: m.avatar || contacts.get(senderId || "")?.avatar || "",
           outgoing: senderId === "owner" || m.outgoing,
           meta: {
             ...m.meta,
             conversationId: chat.id,
             participants: chat.participants.join(","),
+            // 会话级群属性只写一次短的元信息，渲染层据此显示成员名字与群头像。
+            ...(chat.kind === "group" ? { conversationKind: "group" } : {}),
+            ...(chat.groupAvatar ? { groupAvatar: chat.groupAvatar } : {}),
           },
         },
         `chats.${n}.messages.${j}`,

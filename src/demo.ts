@@ -75,7 +75,7 @@ export function createWork(title = "雨停之前"): Work {
           a.engine === "messaging"
             ? "你捡到这部手机了吗？\n别着急，线索就在备忘录里。"
             : a.engine === "records"
-              ? "2026 年 9 月 1 日 · 城南旧书店\n这是故事里的一条虚构记录。"
+              ? "2026 年 9 月 1 日 · 城南旧书店\n那天在这里记了一笔。"
               : "那天的雨下得很大，我们约好在旧书店见面。\n可是，有人一直没有出现。",
         kind:
           a.engine === "social"
@@ -257,7 +257,7 @@ export function createEmptyWork(): Work {
   const w = createWork("未命名作品");
   w.description = "";
   w.category = "未分类";
-  w.phone.owner = "机主";
+  w.phone.owner = "我";
   w.nodes = [];
   w.variables = {};
   w.data = {};

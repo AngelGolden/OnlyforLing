@@ -564,6 +564,19 @@
   font-size: 11px;
   padding: 11px 0;
   min-width: 0;
+  flex: 1;
+}
+.safari-address .safari-back {
+  display: grid;
+  place-items: center;
+  color: #2f6db3;
+  padding: 0 2px;
+}
+.safari-address .safari-go {
+  display: grid;
+  place-items: center;
+  color: #7c818a;
+  padding: 0 2px;
 }
 .native-notes {
   --app-accent: #cfa525;
@@ -3072,6 +3085,50 @@
 }
 .youtube-shorts .youtube-byline {
   padding: 8px 3px;
+}
+/* YouTube：本地视频在 Skin 内播放，不写 Runtime、不触发剧情 read 副作用。 */
+.youtube-player-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  /* 背景/文字色沿用 .catalog-skin：深浅主题都能保持对比度。 */
+}
+.youtube-player-video {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  background: #000;
+}
+/* 竖屏 Shorts（720x1280）在手机里需要更高的画面，避免被 260px 压得太小。 */
+.youtube-player.is-shorts .youtube-player-video {
+  max-height: 420px;
+  margin-inline: auto;
+}
+.youtube-player-byline {
+  padding: 12px 12px 10px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.28);
+}
+.youtube-player-byline strong {
+  display: block;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.youtube-player-byline small {
+  display: block;
+  margin-top: 6px;
+  color: #999;
+  font-size: 10px;
+}
+.youtube-player p {
+  margin: 0;
+  padding: 12px;
+  color: inherit;
+  opacity: 0.8;
+  font-size: 11px;
+  white-space: pre-wrap;
 }
 .bilibili-ui {
   --app-accent: #d7779c;

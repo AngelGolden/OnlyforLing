@@ -1,0 +1,164 @@
+/* 音乐 App｜简洁歌曲列表 + 控制条 + 迷你播放器。
+   背景与文字色一律沿用 .catalog-skin（深浅主题由现有 .dark-phone 规则覆盖），
+   分隔线用半透明中性色，避免深色模式出现亮白块或白底浅字。 */
+
+.music-ui {
+  position: relative;
+  user-select: none;
+}
+
+.music-scroll {
+  padding-bottom: 8px;
+}
+
+.music-heading {
+  margin: 14px 16px 8px;
+  font-size: 21px;
+  font-weight: 650;
+  color: inherit;
+}
+
+.music-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 一行只有歌曲名 + 歌手名；不渲染封面、歌词、专辑、评论、点赞数。 */
+.music-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.22);
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.music-row:hover {
+  background: rgba(127, 127, 127, 0.09);
+}
+.music-row.is-current {
+  background: rgba(127, 127, 127, 0.14);
+}
+.music-row.is-current > strong::before {
+  content: "♪ ";
+  color: #d1425b;
+}
+.music-row > strong {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: inherit;
+  word-break: break-word;
+}
+.music-row > small {
+  font-size: 11px;
+  opacity: 0.62;
+  color: inherit;
+}
+.music-hint {
+  margin: 12px 16px 0;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.music-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(127, 127, 127, 0.22);
+  background: rgba(127, 127, 127, 0.06);
+}
+.music-controls > button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 2px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.music-controls > button > span {
+  font-size: 10px;
+  line-height: 1.2;
+  color: inherit;
+}
+.music-controls > button:hover {
+  background: rgba(127, 127, 127, 0.16);
+}
+.music-controls > button.is-on {
+  color: #d1425b;
+}
+
+.music-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-height: 50px;
+  padding: 7px 12px;
+  border-top: 1px solid rgba(127, 127, 127, 0.22);
+  background: rgba(127, 127, 127, 0.13);
+  color: inherit;
+}
+.music-mini-text {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+.music-mini-text > strong,
+.music-mini-text > small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+}
+.music-mini-text > strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.music-mini-text > small {
+  font-size: 10px;
+  opacity: 0.65;
+}
+.music-mini > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(127, 127, 127, 0.2);
+  color: inherit;
+  cursor: pointer;
+}
+
+/* 深色主题：只强化背景与对比，不写死浅色底。 */
+.dark-phone .music-row,
+.dark-phone .music-controls,
+.dark-phone .music-mini {
+  border-color: rgba(255, 255, 255, 0.11);
+}
+.dark-phone .music-row.is-current {
+  background: rgba(255, 255, 255, 0.11);
+}
+.dark-phone .music-mini {
+  background: rgba(255, 255, 255, 0.08);
+}

@@ -726,7 +726,8 @@
   }
 }
 .ios18 .keyboard-open .app-screen {
-  padding-bottom: 370px;
+  /* 由 Phone.tsx 按模拟键盘实测高度写入，保证输入栏紧贴键盘上沿。 */
+  padding-bottom: var(--keyboard-height, 358px);
 }
 .ios18 .keyboard-draft {
   display: flex;
@@ -737,14 +738,15 @@
   gap: 10px;
   align-items: center;
 }
-.ios18 .keyboard-draft input {
-  background: white;
+/* v1.2：键盘不再有可编辑草稿区。这里只保留一条空白工具条，
+   预设文字不会在键盘里重复出现，也就不会与 QWERTY 行叠压。 */
+.ios18 .keyboard-hint {
   flex: 1;
   min-width: 0;
-  font-size: 17px;
-  border: 1px solid #ddd;
-  border-radius: 17px;
-  padding: 5px 12px;
+  height: 30px;
+  border: 1px solid #e3e3e6;
+  border-radius: 15px;
+  background: #fff;
 }
 .ios18 .keyboard-candidates {
   height: 39px;

@@ -1,0 +1,206 @@
+/* 抖音｜沉浸式竖屏短视频。固定黑色沉浸式底，与手机系统深浅主题无关。 */
+
+.douyin-ui {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-size: 12px;
+  touch-action: none;
+  user-select: none;
+}
+
+/* 纵向切换：整条 track 位移一个屏幕高度，配合 transform 过渡形成自然滑动。 */
+.douyin-track {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transition: transform 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.douyin-slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+/* 9:16 竖屏：contain 保证画面自适应、不拉伸变形，剩余区域留黑。 */
+.douyin-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+/* 同一条真实视频作为模糊背景铺满竖屏；前景 contain 保留完整画面、不拉伸不裁剪。
+   用户素材多为 4:3 横屏，这样既能沉浸式占满，也不会裁掉画面里的字幕。 */
+.douyin-backdrop {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(18px) brightness(0.42);
+  transform: scale(1.12);
+  pointer-events: none;
+}
+
+.douyin-video {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+
+.douyin-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  background: rgba(0, 0, 0, 0.78);
+  color: #e5e5e5;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.douyin-overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 34px 12px 20px 14px;
+  z-index: 2;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.66));
+  pointer-events: none;
+}
+
+.douyin-info,
+.douyin-actions {
+  pointer-events: auto;
+}
+
+.douyin-info {
+  min-width: 0;
+  max-width: calc(100% - 70px);
+}
+
+.douyin-author {
+  display: inline-block;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.douyin-author:hover {
+  text-decoration: underline;
+}
+
+.douyin-caption {
+  margin: 6px 0 0;
+  color: #f4f4f4;
+  font-size: 11.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.douyin-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.douyin-avatar {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #2b2b2b;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.douyin-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.douyin-like {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.douyin-back {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  cursor: pointer;
+}
+
+.douyin-counter {
+  position: absolute;
+  top: 15px;
+  right: 13px;
+  z-index: 3;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.douyin-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 12px;
+}

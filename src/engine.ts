@@ -1,5 +1,19 @@
 import type { Action, Condition, Runtime, StoryNode, Work } from "./schema";
 import { makeItem } from "./schema";
+import { registry } from "./registry";
+/** 聊天类 App：只有它们的"解锁内容"才被视为事件消息包。 */
+const MESSAGING_APPS = new Set(
+  registry.filter((r) => r.engine === "messaging").map((r) => r.id),
+);
+/** 是不是一条会话消息（聊天 App 里的消息条目）。 */
+function isChatMessage(w: Work, id: string): boolean {
+  for (const [appId, items] of Object.entries(w.data)) {
+    if (!MESSAGING_APPS.has(appId)) continue;
+    const item = items.find((i) => i.id === id);
+    if (item) return !!item.meta?.conversationId;
+  }
+  return false;
+}
 export function testCondition(c: Condition, s: Runtime): boolean {
   const [scope, ...rest] = c.key.split(":");
   const key = rest.join(":");
@@ -13,9 +27,12 @@ export function testCondition(c: Condition, s: Runtime): boolean {
   const actual =
     scope === "ui"
       ? s.ui?.[rest[0]]?.[rest.slice(1).join(":")]
-      : lists[scope]
-        ? lists[scope].includes(key)
-        : s.variables[c.key];
+      : // "playback:<事件ID>" 读消息包的完成态，用于判断某个剧情对话是否已完整结束。
+        scope === "playback"
+        ? s.playback?.[key]?.playbackStatus
+        : lists[scope]
+          ? lists[scope].includes(key)
+          : s.variables[c.key];
   switch (c.op) {
     case "eq":
       return actual === c.value;
@@ -29,7 +46,86 @@ export function testCondition(c: Condition, s: Runtime): boolean {
       return String(actual ?? "").includes(String(c.value));
   }
 }
-function apply(a: Action, s: Runtime, w: Work) {
+/** 找到内容条目所属的 App。 */
+function findItemApp(w: Work, id: string): string {
+  for (const [appId, items] of Object.entries(w.data))
+    if (items.some((i) => i.id === id)) return appId;
+  return "";
+}
+/**
+ * 事件"入队"：事件触发后，把它要送达的聊天消息登记成一个待播放消息包。
+ * 这里只登记（queued/pending），不播放；播放由玩家打开对应会话时进行。
+ * 每个事件一个独立的包，互不影响。
+ */
+function enqueueEventPack(
+  w: Work,
+  s: Runtime,
+  nodeId: string,
+  actions: Action[],
+) {
+  const ids: string[] = [];
+  for (const a of actions) {
+    if (a.type !== "unlock") continue;
+    // 只有"会话消息"才构成事件消息包（解锁照片、备忘录等不算）。
+    if (!isChatMessage(w, a.key)) continue;
+    if (!ids.includes(a.key)) ids.push(a.key);
+  }
+  if (!ids.length) return;
+  s.playback ??= {};
+  const existing = s.playback[nodeId];
+  if (existing) {
+    // 同一个事件重复触发：只补齐缺失的消息，不重置播放进度。
+    for (const id of ids)
+      if (!existing.messageIds.includes(id)) existing.messageIds.push(id);
+    return;
+  }
+  const appId = findItemApp(w, ids[0]);
+  const thread =
+    w.data[appId]?.find((i) => i.id === ids[0])?.title ?? "";
+  s.playback[nodeId] = {
+    eventId: nodeId,
+    playbackStatus: "pending",
+    nextMessageIndex: 0,
+    deliveredMessageIds: [],
+    messageIds: ids,
+    appId,
+    thread,
+    order: Object.keys(s.playback).length,
+  };
+}
+/**
+ * 通知与来电是「一次投递」的副作用：用「事件节点 ID + action 下标」做持久化幂等键。
+ * 没有 once 的节点（例如开屏的 start-lock-notice）在重复 dispatch 或刷新后
+ * 就不会重复 push 通知；玩家主动 dismiss 通知也不会让事件重新投递。
+ * 键存在 Runtime 上随存档保存，旧存档缺字段时 ??= [] 兼容迁移。
+ */
+function deliverNotice(
+  s: Runtime,
+  nodeId: string,
+  actionIndex: number,
+  notice: string,
+) {
+  s.deliveredNotices ??= [];
+  const key = `${nodeId}:${actionIndex}`;
+  if (s.deliveredNotices.includes(key)) return false;
+  // 兼容旧存档：新增字段缺失时，通知文案还在 notifications 里就说明此前投递过。
+  // 补写幂等键但不重复 push，迁移后刷新 / dismiss 也不会再次投递。
+  if (s.notifications.includes(notice)) {
+    s.deliveredNotices.push(key);
+    return false;
+  }
+  s.deliveredNotices.push(key);
+  return true;
+}
+function apply(
+  a: Action,
+  s: Runtime,
+  w: Work,
+  nodeId = "",
+  actionIndex = -1,
+) {
+  const noticeAllowed = (notice: string) =>
+    !nodeId || deliverNotice(s, nodeId, actionIndex, notice);
   switch (a.type) {
     case "date":
       if (/^\d{4}-\d{2}-\d{2}$/.test(String(a.value))) s.date = String(a.value);
@@ -43,11 +139,13 @@ function apply(a: Action, s: Runtime, w: Work) {
     case "hide":
       if (!s.hidden.includes(a.key)) s.hidden.push(a.key);
       break;
-    case "notification":
-      s.notifications.push(String(a.value));
-      break;
-    case "call":
-      s.notifications.push(`${String(a.value)} 来电`);
+          case "notification":
+            if (noticeAllowed(String(a.value)))
+              s.notifications.push(String(a.value));
+            break;
+          case "call":
+            if (!noticeAllowed(`${String(a.value)} 来电`)) break;
+            s.notifications.push(`${String(a.value)} 来电`);
       s.incomingCall = {
         caller: String(a.value),
         target: a.key,
@@ -116,14 +214,16 @@ function runQueue(
     }
     if (!s.completed.includes(id)) s.completed.push(id);
     s.trace.push(`${event}:${target} → ${n.label}`);
-    for (const a of n.actions) {
+    // 事件触发的当下只做"入队"：登记待播放消息包，不写入聊天历史，也不播放。
+    enqueueEventPack(w, s, n.id, n.actions);
+    for (const [actionIndex, a] of n.actions.entries()) {
       const previous =
         a.type === "variable"
           ? s.variables[a.key]
           : a.type === "time"
             ? s.time
             : undefined;
-      apply(a, s, w);
+      apply(a, s, w, id, actionIndex);
       if (a.type === "variable" && previous !== s.variables[a.key])
         queue.push(
           ...w.nodes

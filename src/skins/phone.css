@@ -1,0 +1,516 @@
+/* 电话 App：iOS 原生电话风格。跟随系统深浅主题，保持手机屏幕比例不变。 */
+.phone-skin {
+  position: relative;
+  background: #f7f7f8;
+  color: #16181d;
+}
+
+.phone-nav {
+  background: #f7f7f8;
+  border-bottom: 1px solid rgba(60, 60, 67, 0.12);
+}
+.phone-nav > div {
+  color: #3c3c43;
+}
+
+.phone-scroll {
+  background: #fff;
+}
+.phone-scroll > h1 {
+  margin: 14px 16px 10px;
+}
+
+.phone-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 14px 10px;
+  padding: 6px 9px;
+  border-radius: 9px;
+  background: #ececef;
+  color: #8a8a8e;
+}
+.phone-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+}
+
+.phone-list {
+  display: flex;
+  flex-direction: column;
+}
+.phone-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 14px;
+  border: 0;
+  border-bottom: 1px solid rgba(60, 60, 67, 0.1);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.phone-row:hover {
+  background: rgba(0, 0, 0, 0.035);
+}
+.phone-row-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.phone-row-main strong {
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.phone-row-main small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #8a8a8e;
+  font-size: 10px;
+}
+.phone-row time,
+.phone-row-number {
+  flex-shrink: 0;
+  color: #8a8a8e;
+  font-size: 10px;
+}
+.phone-row.is-missed strong,
+.phone-row.is-missed .phone-row-main small,
+.is-missed-text {
+  color: #e0362c;
+}
+
+.phone-avatar {
+  display: block;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #d9d9de;
+}
+.phone-avatar.is-default {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+.phone-avatar.is-large {
+  width: 82px;
+  height: 82px;
+  font-size: 34px;
+}
+
+.phone-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: #a0a0a5;
+  font-size: 12px;
+}
+
+.phone-tabs {
+  background: #f9f9fa;
+}
+.phone-tabs button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 9px;
+}
+.phone-tabs button svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* 详情 */
+.phone-detail-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(60, 60, 67, 0.1);
+}
+.phone-detail-hero h2 {
+  margin: 3px 0 0;
+  font-size: 19px;
+  font-weight: 600;
+}
+.phone-detail-hero p {
+  margin: 0;
+  color: #6c6c72;
+  font-size: 12px;
+}
+.phone-call-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 7px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #2fbf5b;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+.phone-detail-info {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 16px;
+}
+.phone-detail-info > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(60, 60, 67, 0.1);
+}
+.phone-detail-info small {
+  color: #8a8a8e;
+  font-size: 11px;
+}
+.phone-detail-info span {
+  font-size: 12px;
+  text-align: right;
+}
+.phone-detail-related,
+.phone-detail-transcript {
+  padding: 12px 16px 24px;
+}
+.phone-detail-related h3,
+.phone-detail-transcript h3 {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #8a8a8e;
+}
+.phone-related-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(60, 60, 67, 0.08);
+  font-size: 11px;
+}
+.phone-related-row time {
+  margin-left: auto;
+  color: #8a8a8e;
+}
+.phone-related-row em {
+  color: #8a8a8e;
+  font-style: normal;
+}
+.phone-transcript-line {
+  max-width: 78%;
+  margin: 6px 0;
+  padding: 7px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  line-height: 1.45;
+  background: #e9e9eb;
+}
+.phone-transcript-line.owner {
+  margin-left: auto;
+  background: #2fbf5b;
+  color: #fff;
+}
+
+/* 拨号键盘 */
+.phone-dialer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 18px 12px;
+}
+.phone-dialer output {
+  min-height: 28px;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  word-break: break-all;
+}
+.phone-dial-number {
+  min-height: 15px;
+  color: #8a8a8e;
+  font-size: 11px;
+}
+.phone-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px 14px;
+  width: 100%;
+  max-width: 280px;
+  margin: 8px 0 12px;
+}
+.phone-keypad button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: #ececef;
+  color: inherit;
+  font-size: 22px;
+  font-weight: 400;
+  cursor: pointer;
+}
+.phone-keypad button:hover {
+  background: #dedee2;
+}
+.phone-keypad button small {
+  height: 10px;
+  font-size: 7px;
+  letter-spacing: 1px;
+}
+.phone-dial-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 52px;
+}
+.phone-dial-call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 50%;
+  background: #2fbf5b;
+  color: #fff;
+  cursor: pointer;
+}
+.phone-dial-call:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.phone-dial-delete {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: #6c6c72;
+  cursor: pointer;
+}
+
+/* 全屏通话界面 */
+.phone-call-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(#f2f3f6, #e6e8ee);
+  color: #16181d;
+}
+.phone-call-back {
+  position: absolute;
+  top: 7px;
+  left: 9px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border: 0;
+  background: transparent;
+  color: #2f7fe0;
+  font-size: 11px;
+  cursor: pointer;
+}
+.phone-call-hero {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 30px 16px 12px;
+}
+.phone-call-hero h2 {
+  margin: 4px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.phone-call-hero p {
+  margin: 0;
+  color: #6c6c72;
+  font-size: 12px;
+}
+.phone-call-status {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #4a4a50;
+}
+.phone-call-timer {
+  margin-top: 2px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #6c6c72;
+}
+
+.phone-call-transcript {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px 14px;
+}
+.phone-bubble {
+  max-width: 78%;
+  padding: 8px 11px;
+  border-radius: 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  word-break: break-word;
+  background: #dcdde2;
+  align-self: flex-start;
+}
+.phone-bubble.owner {
+  align-self: flex-end;
+  background: #2fbf5b;
+  color: #fff;
+}
+.phone-bubble.is-typing {
+  opacity: 0.85;
+}
+
+.phone-call-controls {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px 18px;
+}
+.phone-call-controls > button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  color: #2c2c30;
+  cursor: pointer;
+}
+.phone-call-controls > button small {
+  font-size: 9px;
+}
+.phone-call-controls > button.is-on {
+  background: #2c2c30;
+  color: #fff;
+}
+.phone-call-controls > .phone-hangup {
+  width: 64px;
+  height: 64px;
+  background: #e84035;
+  color: #fff;
+  transform: rotate(135deg);
+}
+.phone-call-controls > .phone-hangup:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.phone-finish {
+  position: absolute;
+  right: 12px;
+  bottom: 4px;
+  border: 0;
+  background: transparent;
+  color: #2f7fe0;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* iOS 深色模式：跟随系统主题，避免在深色手机里出现突兀白块。 */
+.dark-phone .phone-skin,
+.dark-phone .phone-call-screen {
+  background: #1c1c1e;
+  color: #f2f2f7;
+}
+.dark-phone .phone-call-screen {
+  background: linear-gradient(#232326, #151517);
+}
+.dark-phone .phone-nav {
+  background: #1c1c1e;
+  border-color: #38383a;
+}
+.dark-phone .phone-scroll {
+  background: #1c1c1e;
+}
+.dark-phone .phone-row,
+.dark-phone .phone-detail-hero,
+.dark-phone .phone-detail-info > div {
+  border-color: #38383a;
+}
+.dark-phone .phone-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.dark-phone .phone-search,
+.dark-phone .phone-keypad button {
+  background: #2c2c2e;
+}
+.dark-phone .phone-keypad button:hover {
+  background: #3a3a3c;
+}
+.dark-phone .phone-tabs {
+  background: #1c1c1e;
+}
+.dark-phone .phone-transcript-line,
+.dark-phone .phone-bubble {
+  background: #3a3a3c;
+  color: #f2f2f7;
+}
+.dark-phone .phone-transcript-line.owner,
+.dark-phone .phone-bubble.owner {
+  background: #2fbf5b;
+  color: #fff;
+}
+.dark-phone .phone-call-hero p,
+.dark-phone .phone-call-timer,
+.dark-phone .phone-detail-hero p {
+  color: #98989d;
+}
+.dark-phone .phone-call-back {
+  color: #5aa9ff;
+}
+.dark-phone .phone-call-controls > button {
+  background: #3a3a3c;
+  color: #f2f2f7;
+}
+.dark-phone .phone-call-controls > button.is-on {
+  background: #f2f2f7;
+  color: #1c1c1e;
+}

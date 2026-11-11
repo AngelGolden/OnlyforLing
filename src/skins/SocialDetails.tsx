@@ -62,7 +62,7 @@ export function SocialDetail(p: {
   };
   const submit = () => {
     if (!draft.trim()) return;
-    setExtra([...extra, (p.owner || "机主") + "：" + draft.trim()]);
+    setExtra([...extra, (p.owner || "我") + "：" + draft.trim()]);
     setDraft("");
     setTarget("");
     setTab("评论");
@@ -255,7 +255,7 @@ export function SocialDetail(p: {
           submit();
         }}
       >
-        <Avatar name={p.owner || "机主"} />
+        <Avatar name={p.owner || "我"} />
         <input
           aria-label="回复帖子"
           placeholder={

@@ -908,6 +908,26 @@
   display: grid;
   place-items: center;
 }
+.ios18 .wa-chat-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.ios18 .wa-unread {
+  position: absolute;
+  right: -6px;
+  top: -5px;
+  background: #25d366;
+  color: #06281a;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+}
 .ios18 .wx-popup-menu {
   position: absolute;
   right: 8px;

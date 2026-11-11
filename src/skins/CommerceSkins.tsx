@@ -41,7 +41,7 @@ export function AlipaySkin(p: Props) {
             卡包
           </button>
         </div>
-        <small>作品内的虚构支付记录</small>
+        <small>支付记录</small>
       </div>
       <div className="catalog-scroll">
         <SearchBox value={q} set={setQ} />
@@ -183,7 +183,7 @@ export function DeliverySkin(p: Props) {
       <Header p={p} />
       <div className="delivery-location">
         <MapPin size={18} />
-        <strong>{meta(items[0], "address", "作品配送地址")}</strong>
+        <strong>{meta(items[0], "address", "收货地址")}</strong>
       </div>
       <SearchBox value={q} set={setQ} placeholder="搜索商家或订单" />
       <div className="catalog-scroll">
